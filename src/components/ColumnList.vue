@@ -38,7 +38,7 @@ export default defineComponent({
 
       // VIEW:为什么不能直接使用类型断言，而需要 PropType？ [TypeScript 支持 — Vue.js](https://cn.vuejs.org/v2/guide/typescript.html#%E6%A0%87%E6%B3%A8-Prop)
       type: Array as PropType<ColumnProps[]>,
-      require: true
+      required: true
     }
   }
 });
