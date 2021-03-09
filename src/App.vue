@@ -4,9 +4,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import ColumnList from "./components/ColumnList.vue";
+import ColumnList, { ColumnProps } from "./components/ColumnList.vue";
 
-const testData = [
+const testData: ColumnProps[] = [
   {
     id: 1,
     title: "test1的专栏",
