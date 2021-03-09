@@ -1,13 +1,21 @@
 <template>
-  <ul>
+  <div class="row">
     <!-- BUG: No overload matches this call.The last overload gave the following error-->
-    <li v-for="column in list" :key="column.id">
-      <img :src="column.avatar" />
-      <h5>{{ column.title }}</h5>
-      <p>{{ column.description }}</p>
-      <a href="#">进入专栏</a>
-    </li>
-  </ul>
+    <div v-for="column in list" :key="column.id" class="col-4 mb-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body text-center">
+          <img
+            :src="column.avatar"
+            :alt="column.title"
+            class="rounded-circle border border-light w-25 my-3"
+          />
+          <h5 class="card-title">{{ column.title }}</h5>
+          <p class="card-text text-left">{{ column.description }}</p>
+          <a href="#" class="btn btn-outline-success">进入专栏</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
