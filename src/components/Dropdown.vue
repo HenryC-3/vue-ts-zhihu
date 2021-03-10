@@ -15,7 +15,8 @@
 </template>
 <script lang="ts">
 import { ref } from "@vue/reactivity";
-import { onMounted, onUnmounted } from "@vue/runtime-core";
+import useClickOutside from "@/hooks/useClickOutside";
+import { watch } from "@vue/runtime-core";
 export default {
   name: "Dropdown",
   props: {
@@ -26,25 +27,15 @@ export default {
   },
   setup() {
     const isOpen = ref(false);
+    const dropdownRef = ref<null | HTMLElement>(null);
+    const isClickOutside = useClickOutside(dropdownRef);
     const toggleOpen = () => {
       isOpen.value = !isOpen.value;
     };
-    // 获取 DOM 元素
-    const dropdownRef = ref<null | HTMLElement>(null);
-    const handler = (e: MouseEvent) => {
-      if (
-        // [javascript - Detect if click was inside react component or not in typescript - Stack Overflow](https://stackoverflow.com/questions/43842057/detect-if-click-was-inside-react-component-or-not-in-typescript)
-        !dropdownRef.value?.contains(e.target as Node) &&
-        isOpen.value === true
-      ) {
+    watch(isClickOutside, () => {
+      if (isClickOutside.value && isOpen.value === true) {
         isOpen.value = false;
       }
-    };
-    onMounted(() => {
-      document.addEventListener("click", handler);
-    });
-    onUnmounted(() => {
-      document.removeEventListener("click", handler);
     });
     return {
       toggleOpen,
