@@ -32,7 +32,11 @@ export default {
     // 获取 DOM 元素
     const dropdownRef = ref<null | HTMLElement>(null);
     const handler = (e: MouseEvent) => {
-      if (!dropdownRef.value?.contains(e.target) && isOpen.value === true) {
+      if (
+        // [javascript - Detect if click was inside react component or not in typescript - Stack Overflow](https://stackoverflow.com/questions/43842057/detect-if-click-was-inside-react-component-or-not-in-typescript)
+        !dropdownRef.value?.contains(e.target as Node) &&
+        isOpen.value === true
+      ) {
         isOpen.value = false;
       }
     };
