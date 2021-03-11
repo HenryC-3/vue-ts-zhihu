@@ -4,16 +4,10 @@
     <div class="mb-3">
       <label class="form-label">邮箱</label>
       <validate-input></validate-input>
-      <div id="emailHelp" class="form-text">
-        请输入邮箱
-      </div>
     </div>
     <div class="mb-3">
-      <label class="form-label">密码</label>
-      <validate-input></validate-input>
-      <div id="emailHelp" class="form-text">
-        请输入密码
-      </div>
+      <!-- <label class="form-label">密码</label> -->
+      <!-- <validate-input></validate-input> -->
     </div>
     <button type="submit" class="btn btn-primary">登录</button>
   </form>
