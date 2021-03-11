@@ -1,7 +1,7 @@
 <template>
   <input
     class="form-control"
-    @blur="validateEmail"
+    @blur="validateInput"
     v-model="inputRef.val"
     :class="{ 'is-invalid': inputRef.error }"
     v-bind="$attrs"
@@ -31,7 +31,7 @@ export default defineComponent({
       error: false,
       message: ""
     });
-    const validateEmail = () => {
+    const validateInput = () => {
       if (props.rules) {
         const allPassed = props.rules.every(rule => {
           inputRef.message = rule.message;
@@ -54,7 +54,7 @@ export default defineComponent({
 
     return {
       inputRef,
-      validateEmail
+      validateInput
     };
   }
 });
