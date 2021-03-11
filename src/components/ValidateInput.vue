@@ -1,10 +1,10 @@
 <template>
   <input
-    type="email"
     class="form-control"
     @blur="validateEmail"
     v-model="inputRef.val"
     :class="{ 'is-invalid': inputRef.error }"
+    v-bind="$attrs"
   />
   <div class="form-text" v-if="inputRef.error">{{ inputRef.message }}</div>
 </template>

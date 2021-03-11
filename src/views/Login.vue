@@ -3,7 +3,11 @@
   <form>
     <div class="mb-3">
       <label class="form-label">邮箱</label>
-      <validate-input :rules="emailRules"></validate-input>
+      <validate-input
+        :rules="emailRules"
+        type="text"
+        placeholder="请输入邮箱"
+      ></validate-input>
     </div>
     <div class="mb-3">
       <!-- <label class="form-label">密码</label> -->
