@@ -30,7 +30,7 @@ export default defineComponent({
       { type: "email", message: "邮箱格式错误" }
     ];
     const doValidate = () => {
-      console.log("test");
+      //
     };
     return {
       emailRules,

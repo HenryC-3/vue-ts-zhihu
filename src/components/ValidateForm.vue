@@ -15,9 +15,15 @@
 </template>
 
 <script>
+import miit from "mitt";
+export const emitter = miit();
 export default {
   emits: ["form-submit"],
   setup(props, context) {
+    const handler = val => {
+      console.log(val);
+    };
+    emitter.on("form-item-created", handler);
     const submitForm = () => {
       context.emit("form-submit", true);
     };
