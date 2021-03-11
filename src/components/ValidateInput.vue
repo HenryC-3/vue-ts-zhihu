@@ -3,37 +3,57 @@
     type="email"
     class="form-control"
     @blur="validateEmail"
-    v-model="emailRef.val"
-    :class="{ 'is-invalid': emailRef.error }"
+    v-model="inputRef.val"
+    :class="{ 'is-invalid': inputRef.error }"
   />
-  <div class="form-text" v-if="emailRef.error">{{ emailRef.message }}</div>
+  <div class="form-text" v-if="inputRef.error">{{ inputRef.message }}</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, PropType, reactive } from "vue";
+
+interface RuleProp {
+  type: "required" | "email";
+  message: string;
+}
+
+export type RulesProp = RuleProp[];
 
 export default defineComponent({
-  setup() {
+  name: "ValidateInput",
+  props: {
+    rules: Array as PropType<RulesProp>
+  },
+  setup(props) {
     const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const emailRef = reactive({
+    const inputRef = reactive({
       val: "",
       error: false,
       message: ""
     });
     const validateEmail = () => {
-      if (emailRef.val.trim() === "") {
-        emailRef.error = true;
-        emailRef.message = "邮箱不能为空";
-      } else if (!emailReg.test(emailRef.val)) {
-        emailRef.error = true;
-        emailRef.message = "邮箱格式错误";
-      } else {
-        emailRef.error = false;
+      if (props.rules) {
+        const allPassed = props.rules.every(rule => {
+          inputRef.message = rule.message;
+          let passed = true;
+          switch (rule.type) {
+            case "required":
+              passed = inputRef.val.trim() !== "";
+              break;
+            case "email":
+              passed = emailReg.test(inputRef.val);
+              break;
+            default:
+              break;
+          }
+          return passed;
+        });
+        inputRef.error = !allPassed;
       }
     };
 
     return {
-      emailRef,
+      inputRef,
       validateEmail
     };
   }
