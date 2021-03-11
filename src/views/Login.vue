@@ -1,5 +1,5 @@
 <template>
-  <validate-form>
+  <validate-form @form-submit="doValidate">
     <!--  -->
     <template #default>
       <label class="form-label">邮箱</label>
@@ -29,8 +29,12 @@ export default defineComponent({
       { type: "required", message: "邮箱不能为空" },
       { type: "email", message: "邮箱格式错误" }
     ];
+    const doValidate = () => {
+      console.log("test");
+    };
     return {
-      emailRules
+      emailRules,
+      doValidate
     };
   }
 });
