@@ -1,5 +1,5 @@
 <template>
-  <validate-form @form-submit="doValidate">
+  <validate-form @form-submit="showValidate">
     <!--  -->
     <template #default>
       <label class="form-label">邮箱</label>
@@ -29,12 +29,12 @@ export default defineComponent({
       { type: "required", message: "邮箱不能为空" },
       { type: "email", message: "邮箱格式错误" }
     ];
-    const doValidate = () => {
-      //
+    const showValidate = (result: boolean) => {
+      console.log("验证结果：", result);
     };
     return {
       emailRules,
-      doValidate
+      showValidate
     };
   }
 });

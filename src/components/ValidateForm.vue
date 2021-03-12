@@ -5,7 +5,7 @@
       <slot name="default"></slot>
     </div>
     <!-- 点击提交时触发 form-submit 事件 -->
-    <div @click="submitForm">
+    <div @click.prevent="submitForm">
       <slot name="submit">
         <!-- NOTE：在 slot 内容渲染默认内容 -->
         <button type="submit" class="btn btn-primary">登录</button>
@@ -14,17 +14,21 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import emitter from "../utils/emitter";
+import { Handler } from "mitt";
+type validateFunc = () => boolean;
+const funcArr: validateFunc[] = [];
 export default {
   emits: ["form-submit"],
   setup(props, context) {
-    const handler = val => {
-      console.log(val);
+    const handler: Handler = (func: validateFunc) => {
+      funcArr.push(func);
     };
     emitter.on("form-item-created", handler);
     const submitForm = () => {
-      context.emit("form-submit", true);
+      const result = funcArr.map(func => func()).every(result => result);
+      context.emit("form-submit", result);
     };
     return {
       submitForm
