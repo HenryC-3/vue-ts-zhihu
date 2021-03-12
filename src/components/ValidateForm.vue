@@ -15,8 +15,7 @@
 </template>
 
 <script>
-import miit from "mitt";
-export const emitter = miit();
+import emitter from "../utils/emitter";
 export default {
   emits: ["form-submit"],
   setup(props, context) {

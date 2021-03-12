@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, PropType, reactive } from "vue";
-import { emitter } from "./ValidateForm.vue";
+import emitter from "../utils/emitter";
 
 interface RuleProp {
   type: "required" | "email";
