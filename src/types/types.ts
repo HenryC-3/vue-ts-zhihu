@@ -19,3 +19,12 @@ export interface UserProps {
   name?: string;
   id?: number;
 }
+
+export interface PostProps {
+  id: number;
+  title: string;
+  content: string;
+  img?: string;
+  createdAt: string;
+  columnId: number;
+}
