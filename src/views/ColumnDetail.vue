@@ -35,12 +35,18 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 import { testPostData } from "../utils/mockData";
 
 export default defineComponent({
   name: "ColumnDetail",
   setup() {
-    const postData = testPostData;
+    const route = useRoute();
+    const postData = testPostData.filter(post => {
+      if (post.columnId === Number(route.params.id)) {
+        return post;
+      }
+    });
     return {
       postData
     };
