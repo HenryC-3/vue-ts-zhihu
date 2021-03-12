@@ -17,9 +17,11 @@
 <script lang="ts">
 import emitter from "../utils/emitter";
 import { Handler } from "mitt";
+import { defineComponent } from "@vue/runtime-core";
 type validateFunc = () => boolean;
 const funcArr: validateFunc[] = [];
-export default {
+export default defineComponent({
+  // VIEW：为什么之前没用 defineComponent 也没事？
   emits: ["form-submit"],
   setup(props, context) {
     const handler: Handler = (func: validateFunc) => {
@@ -34,5 +36,5 @@ export default {
       submitForm
     };
   }
-};
+});
 </script>
