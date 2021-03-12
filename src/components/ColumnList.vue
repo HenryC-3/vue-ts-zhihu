@@ -27,13 +27,8 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
+import { ColumnProps } from "../types/types";
 
-export interface ColumnProps {
-  id: number;
-  title: string;
-  avatar?: string;
-  description: string;
-}
 export default defineComponent({
   name: "ColumnList",
   props: {

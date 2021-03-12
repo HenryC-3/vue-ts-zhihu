@@ -6,7 +6,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import ColumnList, { ColumnProps } from "../components/ColumnList.vue";
+import ColumnList from "../components/ColumnList.vue";
+import { ColumnProps } from "../types/types";
 
 const testData: ColumnProps[] = [
   {

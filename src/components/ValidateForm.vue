@@ -19,7 +19,8 @@
 import emitter from "../utils/emitter";
 import { Handler } from "mitt";
 import { defineComponent } from "@vue/runtime-core";
-type validateFunc = () => boolean;
+import { validateFunc } from "../types/types";
+
 const funcArr: validateFunc[] = [];
 export default defineComponent({
   // VIEW：为什么之前没用 defineComponent 也

@@ -12,13 +12,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, PropType, reactive } from "vue";
 import emitter from "../utils/emitter";
-
-interface RuleProp {
-  type: "required" | "email";
-  message: string;
-}
-
-export type RulesProp = RuleProp[];
+import { RulesProp } from "../types/types";
 
 export default defineComponent({
   name: "ValidateInput",

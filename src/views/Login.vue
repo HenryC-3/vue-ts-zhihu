@@ -20,7 +20,8 @@
 import ValidateForm from "@/components/ValidateForm.vue";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
-import ValidateInput, { RulesProp } from "../components/ValidateInput.vue";
+import ValidateInput from "../components/ValidateInput.vue";
+import { RulesProp } from "../types/types";
 
 export default defineComponent({
   name: "Login",
