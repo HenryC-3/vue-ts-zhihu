@@ -8,14 +8,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import GlobalHeader from "./components/GlobalHeader.vue";
-import { UserProps } from "./types/types";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-const testUserData: UserProps = {
-  isLogin: true,
-  name: "Henry",
-  id: 9527
-};
+import { testUserData } from "./utils/mockData";
 
 export default defineComponent({
   name: "App",
