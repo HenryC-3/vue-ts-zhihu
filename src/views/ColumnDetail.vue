@@ -37,7 +37,6 @@
 import { computed, defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { PostProps } from "../types/types";
 
 export default defineComponent({
   name: "ColumnDetail",
@@ -45,12 +44,9 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     return {
+      // 封装后
       postData: computed(() =>
-        store.state.posts.filter((post: PostProps) => {
-          if (post.columnId === Number(route.params.id)) {
-            return post;
-          }
-        })
+        store.getters.getPostByColumnId(Number(route.params.id))
       )
     };
   }

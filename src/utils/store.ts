@@ -12,5 +12,9 @@ export const store = createStore<GlobalStore>({
     login(state) {
       state.user = { isLogin: true, name: "Zack" };
     }
+  },
+  getters: {
+    getPostByColumnId: state => (columnId: number) =>
+      state.posts.filter(post => post.columnId === columnId)
   }
 });
