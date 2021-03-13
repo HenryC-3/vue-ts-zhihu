@@ -28,3 +28,9 @@ export interface PostProps {
   createdAt: string;
   columnId: number;
 }
+
+export interface GlobalStore {
+  columns: ColumnProps[];
+  posts: PostProps[];
+  user: UserProps;
+}
