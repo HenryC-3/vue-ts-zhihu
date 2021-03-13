@@ -34,21 +34,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { useRoute } from "vue-router";
-import { testPostData } from "../utils/mockData";
+import { useStore } from "vuex";
+import { PostProps } from "../types/types";
 
 export default defineComponent({
   name: "ColumnDetail",
   setup() {
     const route = useRoute();
-    const postData = testPostData.filter(post => {
-      if (post.columnId === Number(route.params.id)) {
-        return post;
-      }
-    });
+    const store = useStore();
     return {
-      postData
+      postData: computed(() =>
+        store.state.posts.filter((post: PostProps) => {
+          if (post.columnId === Number(route.params.id)) {
+            return post;
+          }
+        })
+      )
     };
   }
 });
