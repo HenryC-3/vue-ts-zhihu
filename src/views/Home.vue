@@ -5,18 +5,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+import { useStore } from "vuex";
 import ColumnList from "../components/ColumnList.vue";
-import { testData } from "../utils/mockData";
-
 export default defineComponent({
   name: "Home",
   components: { ColumnList },
   setup() {
-    const data = testData;
-    return { data };
+    const store = useStore();
+    return { data: computed(() => store.state.columns) };
   }
 });
 </script>
-
 <style></style>
