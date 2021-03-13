@@ -43,6 +43,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const store = useStore();
+    // IMPR: store.getter 无法补全
     return {
       // 封装后
       postData: computed(() =>
