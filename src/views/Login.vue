@@ -20,6 +20,7 @@
 import ValidateForm from "@/components/ValidateForm.vue";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import ValidateInput from "../components/ValidateInput.vue";
 import { RulesProp } from "../types/types";
 
@@ -27,6 +28,7 @@ export default defineComponent({
   name: "Login",
   components: { ValidateInput, ValidateForm },
   setup() {
+    const store = useStore();
     const router = useRouter();
     const emailRules: RulesProp = [
       { type: "required", message: "邮箱不能为空" },
@@ -36,6 +38,7 @@ export default defineComponent({
       // 如果验证通过，跳转到首页
       if (result) {
         router.push({ name: "home" });
+        store.commit("login");
       }
     };
     return {

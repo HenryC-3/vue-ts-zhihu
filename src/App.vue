@@ -6,17 +6,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import GlobalHeader from "./components/GlobalHeader.vue";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { testUserData } from "./utils/mockData";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "App",
   components: { GlobalHeader },
   setup() {
-    const userData = testUserData;
-    return { userData };
+    const store = useStore();
+    return { userData: computed(() => store.state.user) };
   }
 });
 </script>
