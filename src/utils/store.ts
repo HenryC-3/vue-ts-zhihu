@@ -1,4 +1,4 @@
-import { GlobalStore } from "@/types/types";
+import { GlobalStore, PostProps } from "@/types/types";
 import { createStore } from "vuex";
 import { testData, testPostData } from "./mockData";
 
@@ -10,7 +10,10 @@ export const store = createStore<GlobalStore>({
   },
   mutations: {
     login(state) {
-      state.user = { isLogin: true, name: "Zack" };
+      state.user = { isLogin: true, name: "Zack", columnId: 1 };
+    },
+    createPost(state, post: PostProps) {
+      state.posts.push(post);
     }
   },
   getters: {
