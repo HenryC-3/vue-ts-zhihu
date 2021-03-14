@@ -34,3 +34,5 @@ export interface GlobalStore {
   posts: PostProps[];
   user: UserProps;
 }
+
+export type TagType = "input" | "textarea";
