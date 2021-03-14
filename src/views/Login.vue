@@ -33,8 +33,8 @@ export default defineComponent({
     const onFormSubmit = (result: boolean) => {
       // 如果验证通过，跳转到首页
       if (result) {
-        router.push({ name: "home" });
         store.commit("login");
+        router.push({ name: "home" });
       }
     };
     return {
