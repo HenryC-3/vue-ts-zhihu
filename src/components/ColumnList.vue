@@ -3,8 +3,9 @@
     <div v-for="column in columnList" :key="column.id" class="col-4 mb-4">
       <div class="card h-100 shadow-sm">
         <div class="card-body text-center">
+          <!-- column.avatar && column.avatar.url 此处表达当 column。avatar 为真，返回 column.avatar.url-->
           <img
-            :src="column.avatar"
+            :src="column.avatar && column.avatar.url"
             :alt="column.title"
             class="rounded-circle border border-light w-25 my-3"
           />
@@ -27,7 +28,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import { ColumnProps } from "../types/types";
+import { ColumnProps, AvatarProps } from "../types/types";
 
 export default defineComponent({
   name: "ColumnList",
@@ -48,7 +49,10 @@ export default defineComponent({
     const columnList = computed(() => {
       return props.list.map(column => {
         if (!column.avatar) {
-          column.avatar = require("@/assets/defaultImg.jpg");
+          const defaultAvatar: AvatarProps = {
+            url: require("@/assets/defaultImg.jpg")
+          };
+          column.avatar = defaultAvatar;
         }
         return column;
       });
