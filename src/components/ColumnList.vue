@@ -53,6 +53,11 @@ export default defineComponent({
             url: require("@/assets/defaultImg.jpg")
           };
           column.avatar = defaultAvatar;
+        } else {
+          // BUG:编译错误：Uncaught (in promise) TypeError: Cannot create property 'url' on string
+          // 文档：[图片缩放 - 对象存储 OSS - 阿里云](https://help.aliyun.com/document_detail/44688.html)
+          column.avatar.url =
+            column.avatar.url + "?x-oss-process=image/resize,m_pad,h_50,w_50";
         }
         return column;
       });
