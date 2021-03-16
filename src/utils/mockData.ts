@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ColumnProps, UserProps, PostProps } from "../types/types";
 
 export const testData: ColumnProps[] = [
