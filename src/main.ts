@@ -6,7 +6,12 @@ import axios from "axios";
 
 const ICODE = process.env.VUE_APP_ICODE;
 
-axios.get(`http://apis.imooc.com/api/columns?icode=${ICODE}`).then(res => {
+axios.defaults.baseURL = "http://apis.imooc.com/api/";
+axios.interceptors.request.use(config => {
+  config.params = { ...config.params, icode: ICODE };
+  return config;
+});
+axios.get(`columns`).then(res => {
   console.log(res.data);
 });
 
