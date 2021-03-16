@@ -1,10 +1,15 @@
 export interface ColumnProps {
   id: number;
   title: string;
-  avatar?: string;
+  avatar?: AvatarProps;
   description: string;
 }
 
+export interface AvatarProps {
+  _id?: string;
+  url?: string;
+  createdAt?: string;
+}
 export interface RuleProp {
   type: "required" | "email";
   message: string;
