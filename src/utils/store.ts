@@ -6,7 +6,8 @@ export const store = createStore<GlobalStore>({
   state: {
     columns: [],
     posts: [],
-    user: { isLogin: false }
+    user: { isLogin: false },
+    loading: true
   },
   mutations: {
     login(state) {

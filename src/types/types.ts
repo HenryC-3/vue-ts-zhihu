@@ -45,6 +45,7 @@ export interface GlobalStore {
   columns: ColumnProps[];
   posts: PostProps[];
   user: UserProps;
+  loading: boolean;
 }
 
 export type TagType = "input" | "textarea";

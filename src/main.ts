@@ -12,6 +12,13 @@ axios.interceptors.request.use(config => {
   return config;
 });
 
+axios.interceptors.response.use(config => {
+  setTimeout(() => {
+    store.state.loading = false;
+  }, 2000);
+  return config;
+});
+
 const app = createApp(App);
 app.use(router);
 app.use(store);
