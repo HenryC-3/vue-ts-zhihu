@@ -47,7 +47,8 @@ export default defineComponent({
     const onPostSubmit = (result: boolean) => {
       if (result) {
         const post: PostProps = {
-          id: Math.floor(Math.random() * 10),
+          _id: Math.floor(Math.random() * 10).toString(),
+          excerpt: "",
           content: content.value,
           title: title.value,
           createdAt: new Date().toDateString(),

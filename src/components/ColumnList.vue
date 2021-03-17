@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-for="column in columnList" :key="column.id" class="col-4 mb-4">
+    <div v-for="column in columnList" :key="column._id" class="col-4 mb-4">
       <div class="card h-100 shadow-sm">
         <div class="card-body text-center">
           <!-- column.avatar && column.avatar.url 此处表达当 column。avatar 为真，返回 column.avatar.url-->
@@ -18,7 +18,7 @@
           > -->
           <router-link
             class="btn btn-outline-success"
-            :to="`/column/${column.id}`"
+            :to="`/column/${column._id}`"
             >进入专栏</router-link
           >
         </div>
