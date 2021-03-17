@@ -1,5 +1,5 @@
 export interface ColumnProps {
-  _id: number;
+  _id: string;
   title: string;
   avatar?: AvatarProps;
   description: string;
