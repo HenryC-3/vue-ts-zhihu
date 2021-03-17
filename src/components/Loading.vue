@@ -1,7 +1,13 @@
 <template>
   <!-- 挂载在 div#loading 上 -->
   <teleport to="#loading">
-    <h1 v-if="loading">😄 正在加载</h1>
+    <div
+      class="loading-container d-flex justify-content-center align-items-center"
+    >
+      <div class="spinner-border text-primary" role="status" v-if="loading">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   </teleport>
 </template>
 
@@ -25,3 +31,13 @@ export default defineComponent({
   }
 });
 </script>
+<style scoped>
+.loading-container {
+  background: rgba(255, 255, 255, 0.5);
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+  z-index: 100;
+}
+</style>
