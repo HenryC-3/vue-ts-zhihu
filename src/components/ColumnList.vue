@@ -28,7 +28,8 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import { ColumnProps, AvatarProps } from "../types/types";
+import { ColumnProps } from "../types/types";
+import addColumnAvatar from "../utils/addColumnAvatar";
 
 export default defineComponent({
   name: "ColumnList",
@@ -49,10 +50,7 @@ export default defineComponent({
     const columnList = computed(() => {
       return props.list.map(column => {
         if (!column.avatar) {
-          const defaultAvatar: AvatarProps = {
-            url: require("@/assets/defaultImg.jpg")
-          };
-          column.avatar = defaultAvatar;
+          addColumnAvatar(column);
         }
         return column;
       });
