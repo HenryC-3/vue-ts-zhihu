@@ -1,12 +1,11 @@
 import { GlobalStore, PostProps } from "@/types/types";
 import { createStore } from "vuex";
-import { testData, testPostData } from "./mockData";
 import axios from "axios";
 
 export const store = createStore<GlobalStore>({
   state: {
-    columns: testData,
-    posts: testPostData,
+    columns: [],
+    posts: [],
     user: { isLogin: false }
   },
   mutations: {
@@ -18,6 +17,9 @@ export const store = createStore<GlobalStore>({
     },
     fetchColumns(state, rowData) {
       state.columns = rowData.data.list;
+    },
+    fetchPosts(state, rowData) {
+      state.posts = rowData.data.list;
     }
   },
   actions: {
@@ -25,10 +27,11 @@ export const store = createStore<GlobalStore>({
       axios.get("columns").then(res => {
         context.commit("fetchColumns", res.data);
       });
+    },
+    fetchPosts(context, payload) {
+      axios.get(`columns/${payload.columnId}/posts`).then(res => {
+        context.commit("fetchPosts", res.data);
+      });
     }
-  },
-  getters: {
-    getPostByColumnId: state => (columnId: number) =>
-      state.posts.filter(post => post.columnId === columnId)
   }
 });
