@@ -1,5 +1,5 @@
 export interface ColumnProps {
-  id: number;
+  _id: number;
   title: string;
   avatar?: AvatarProps;
   description: string;
@@ -26,11 +26,17 @@ export interface UserProps {
   columnId?: number;
 }
 
+export interface ImageProps {
+  _id: string;
+  url: string;
+  createdAt: string;
+}
 export interface PostProps {
-  id: number;
+  _id: string;
   title: string;
+  excerpt: string;
   content: string;
-  img?: string;
+  image?: ImageProps;
   createdAt: string;
   columnId: number;
 }
