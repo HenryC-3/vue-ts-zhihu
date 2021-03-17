@@ -2,14 +2,13 @@
   <!-- ColumnDetail Header -->
   <div class="card col-8 border-0 flex-row" style="margin:50px auto 100px auto">
     <div class="card-body">
-      <h5 class="card-title">干货考研经验</h5>
+      <h5 class="card-title">{{ column.title }}</h5>
       <p class="card-text">
-        Some quick example text to build on the card title and make up the bulk
-        of the card's content.
+        {{ column.description }}
       </p>
     </div>
     <img
-      src="../assets/defaultImg.jpg"
+      :src="column.avatar && column.avatar.url"
       class="rounded-circle border border-light me-5"
     />
   </div>
@@ -18,6 +17,7 @@
 
 <script lang="ts">
 import PostList from "@/components/PostList.vue";
+import addColumnAvatar from "@/utils/addColumnAvatar";
 import { computed, defineComponent, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
@@ -32,10 +32,21 @@ export default defineComponent({
       store.dispatch("fetchPosts", {
         columnId: route.params.id
       });
+      store.dispatch("fetchColumn", {
+        columnId: route.params.id
+      });
+    });
+    const column = computed(() => {
+      const selectedColumn = store.getters.getColumnById(route.params.id);
+      if (!selectedColumn.avatar) {
+        addColumnAvatar(selectedColumn);
+      }
+      return selectedColumn;
     });
     return {
       // 现在直接返回对应专栏文章列表，无需过滤
-      posts: computed(() => store.state.posts)
+      posts: computed(() => store.state.posts),
+      column
     };
   }
 });
