@@ -27,7 +27,7 @@ export const store = createStore<GlobalStore>({
     }
   },
   actions: {
-    async fetchColumns(context) {
+    fetchColumns(context) {
       axios.get("columns").then(res => {
         context.commit("fetchColumns", res.data);
       });
@@ -44,9 +44,8 @@ export const store = createStore<GlobalStore>({
     }
   },
   getters: {
-    // BUG: 页面刷新时会将 state 中的数据清空，导致报错
     getColumnById: state => (id: string) => {
-      return state.columns.find(c => c._id === id);
+      return state.columns.find(c => c._id === id) || [];
     }
   }
 });
