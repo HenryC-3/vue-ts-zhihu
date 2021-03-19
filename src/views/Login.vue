@@ -4,11 +4,19 @@
     <template #default>
       <label class="form-label">邮箱</label>
       <validate-input
+        v-model="email"
         :rules="emailRule"
-        type="text"
+        type="email"
         placeholder="请输入邮箱"
-      ></validate-input
-    ></template>
+      ></validate-input>
+      <label class="form-label">密码</label>
+      <validate-input
+        v-model="password"
+        :rules="passwordRule"
+        type="password"
+        placeholder="请输入密码"
+      ></validate-input>
+    </template>
     <!--  -->
     <template #submit>
       <button type="submit" class="btn btn-danger">提交</button>
@@ -18,16 +26,19 @@
 
 <script lang="ts">
 import ValidateForm from "@/components/ValidateForm.vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import ValidateInput from "../components/ValidateInput.vue";
-import { emailRule } from "../utils/validateRules";
+import { emailRule, passwordRule } from "../utils/validateRules";
 
 export default defineComponent({
   name: "Login",
   components: { ValidateInput, ValidateForm },
   setup() {
+    const email = ref("");
+    const password = ref("");
+
     const store = useStore();
     const router = useRouter();
     const onFormSubmit = (result: boolean) => {
@@ -39,7 +50,10 @@ export default defineComponent({
     };
     return {
       emailRule,
-      onFormSubmit
+      passwordRule,
+      onFormSubmit,
+      email,
+      password
     };
   }
 });
