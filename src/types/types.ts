@@ -21,9 +21,9 @@ export type validateFunc = () => boolean;
 
 export interface UserProps {
   isLogin: boolean;
-  name?: string;
-  id?: number;
-  columnId?: number;
+  nickName?: string;
+  _id?: string;
+  columnId?: string;
 }
 
 export interface ImageProps {

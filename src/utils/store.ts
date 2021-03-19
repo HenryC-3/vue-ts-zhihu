@@ -25,6 +25,9 @@ export const store = createStore<GlobalStore>({
     },
     fetchPosts(state, rowData) {
       state.posts = rowData.data.list;
+    },
+    fetchCurrentUser(state, rowData) {
+      state.user = { isLogin: true, ...rowData.data };
     }
   },
   actions: {
@@ -43,9 +46,17 @@ export const store = createStore<GlobalStore>({
         context.commit("fetchPosts", res.data);
       });
     },
+    fetchCurrentUser(context, payload) {
+      axios
+        .get("user/current", {
+          headers: { Authorization: `Bearer ${payload}` }
+        })
+        .then(res => {
+          context.commit("fetchCurrentUser", res.data);
+        });
+    },
     login(context, payload) {
       return axios.post(`user/login`, payload).then(res => {
-        debugger;
         context.commit("login", res.data);
         return res.data;
       });
