@@ -1,4 +1,4 @@
-## 前言
+### 前言
 - 为什么迁移到 foam ？
   - obsidian 目前功能不完善，而且很卡 
   - foam 依托于 vscode，相较于 obsidian 有以下优势
@@ -9,10 +9,10 @@
   - 迁移后能够在 vscode 中完成大部分操作
 
 ### 初始化
-
+- 仓库地址：[HenryC-3/FoamC-3: HenryC-3's foam template](https://github.com/HenryC-3/FoamC-3)
 ### 快捷键
 
-- 预览：cmd+k,v
+- 预览：cmd+k,v 或 cmd+shift+v
 - 视图(移动时，鼠标必须聚焦某一窗口上)
   - 切换左右编辑器：cmd+shift+[ | ]
   - 切换到之前|后的编辑器：cmd+alt+left | right
@@ -24,6 +24,7 @@
   - 跳出括号、引号：对应符号右侧
   - 上下移动行：alt+top | down
   - 换行：shift+cmd+enter
+  - 图片粘贴：ctrl+alt+v
 - 查找
   - 查找光标所在单词：cmd+e
 

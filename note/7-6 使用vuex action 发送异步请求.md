@@ -46,7 +46,7 @@
 	s->>v:监听数据，computed(()=> data)，数据改变
 	v->>p:重新渲染
 	```
-- #todo/feat 
+- 待办 
 	- [x] 添加适配后端数据结构的 avatar Interface
 	- [ ] 缩小图片
 	- [x] 修改组件中变量值，适配后端数据形式
