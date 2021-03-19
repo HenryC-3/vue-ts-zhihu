@@ -17,6 +17,8 @@
   - 切换左右编辑器：cmd+shift+[ | ]
   - 切换到之前|后的编辑器：cmd+alt+left | right
   - 切换文件：cmd+p
+  - 折叠节点内容：cmd+k, cmd+1/2/3/4
+  - 展开节点内容：cmd+k，cmd+j
 - 编辑
   - 左右按单个字符移动光标：alt+left | right 
   - 同时编辑多处：cmd+alt+方向键

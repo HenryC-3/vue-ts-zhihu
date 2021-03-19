@@ -3,8 +3,9 @@
   <teleport to="#loading">
     <div
       class="loading-container d-flex justify-content-center align-items-center"
+      v-if="loading"
     >
-      <div class="spinner-border text-primary" role="status" v-if="loading">
+      <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
@@ -12,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onUnmounted } from "vue";
 
 export default defineComponent({
   name: "Loading",
@@ -26,8 +27,10 @@ export default defineComponent({
     // 创建 teleport 挂载 DOM 节点
     const loadingDiv = document.createElement("div");
     loadingDiv.id = "loading";
-    const rootDiv = document.getElementById("app");
-    document.body.insertBefore(loadingDiv, rootDiv);
+    document.body.appendChild(loadingDiv);
+    onUnmounted(() => {
+      document.body.removeChild(loadingDiv);
+    });
   }
 });
 </script>
