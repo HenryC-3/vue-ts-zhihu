@@ -4,14 +4,15 @@ import axios from "axios";
 
 export const store = createStore<GlobalStore>({
   state: {
+    token: "",
     columns: [],
     posts: [],
     user: { isLogin: false },
     loading: false
   },
   mutations: {
-    login(state) {
-      state.user = { isLogin: true, name: "Zack", columnId: 1 };
+    login(state, rawData) {
+      state.token = rawData.token;
     },
     createPost(state, post: PostProps) {
       state.posts.push(post);
@@ -40,6 +41,13 @@ export const store = createStore<GlobalStore>({
     fetchPosts(context, payload) {
       axios.get(`columns/${payload.columnId}/posts`).then(res => {
         context.commit("fetchPosts", res.data);
+      });
+    },
+    login(context, payload) {
+      return axios.post(`user/login`, payload).then(res => {
+        debugger;
+        context.commit("login", res.data);
+        return res.data;
       });
     }
   },

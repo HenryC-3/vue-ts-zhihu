@@ -42,6 +42,7 @@ export interface PostProps {
 }
 
 export interface GlobalStore {
+  token: string;
   columns: ColumnProps[];
   posts: PostProps[];
   user: UserProps;

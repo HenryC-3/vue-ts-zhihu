@@ -44,7 +44,13 @@ export default defineComponent({
     const onFormSubmit = (result: boolean) => {
       // 如果验证通过，跳转到首页
       if (result) {
-        store.commit("login");
+        const payload = {
+          email: email.value,
+          password: password.value
+        };
+        store.dispatch("login", payload).then(res => {
+          console.log(res.data.token);
+        });
         router.push({ name: "home" });
       }
     };
