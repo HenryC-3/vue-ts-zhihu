@@ -48,9 +48,7 @@ export default defineComponent({
           email: email.value,
           password: password.value
         };
-        store.dispatch("login", payload).then(res => {
-          store.dispatch("fetchCurrentUser");
-        });
+        store.dispatch("loginAndFetch", payload);
         router.push({ name: "home" });
       }
     };

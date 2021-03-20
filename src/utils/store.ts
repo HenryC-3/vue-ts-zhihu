@@ -59,6 +59,11 @@ export const store = createStore<GlobalStore>({
         context.commit("login", res.data);
         return res.data.data;
       });
+    },
+    loginAndFetch({ dispatch }, payload) {
+      dispatch("login", payload).then(res => {
+        dispatch("fetchCurrentUser");
+      });
     }
   },
   getters: {
