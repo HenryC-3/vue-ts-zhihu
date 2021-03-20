@@ -41,7 +41,13 @@ export interface PostProps {
   columnId: number;
 }
 
+export interface ErrorProps {
+  status: boolean;
+  message?: string;
+}
+
 export interface GlobalStore {
+  error: ErrorProps;
   token: string;
   columns: ColumnProps[];
   posts: PostProps[];

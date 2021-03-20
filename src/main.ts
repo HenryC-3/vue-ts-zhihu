@@ -15,12 +15,19 @@ axios.interceptors.request.use(config => {
   return config;
 });
 
-axios.interceptors.response.use(config => {
-  setTimeout(() => {
+axios.interceptors.response.use(
+  config => {
+    setTimeout(() => {
+      store.state.loading = false;
+    }, 2000);
+    return config;
+  },
+  e => {
+    store.commit("setError", { status: true, message: e.response.data.error });
     store.state.loading = false;
-  }, 2000);
-  return config;
-});
+    return Promise.reject(e);
+  }
+);
 
 const app = createApp(App);
 app.use(router);
