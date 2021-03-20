@@ -49,7 +49,7 @@ export default defineComponent({
           password: password.value
         };
         store.dispatch("login", payload).then(res => {
-          store.dispatch("fetchCurrentUser", res.data.token);
+          store.dispatch("fetchCurrentUser");
         });
         router.push({ name: "home" });
       }
