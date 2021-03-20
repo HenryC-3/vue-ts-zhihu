@@ -16,11 +16,12 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(
-  config => {
+  response => {
+    store.commit("setError", { status: false, message: response.data.msg });
     setTimeout(() => {
       store.state.loading = false;
     }, 2000);
-    return config;
+    return response;
   },
   e => {
     store.commit("setError", { status: true, message: e.response.data.error });
