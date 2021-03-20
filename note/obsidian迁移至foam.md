@@ -30,7 +30,21 @@
 - 查找
   - 查找光标所在单词：cmd+e
 
-### 流程 
+### 版本管理
+这部分的内容结合具体情境更好理解
+- 刚刚 commit 完，你又发现了一个拼写错误，该怎么办？
+  - gitlens undo commit
+  - ![](attachments/gitlens-undo-commit.png) 
+  - git commit --amend: 添加当前已经 stage 的修改到最近一次 commit。指令执行完毕后，终端会跳出 vim 编辑页，提示输入 commit message，输入 `:wq` 退出即可
+- 有多个零碎的 commit，想把它们合并成一个，该怎么办？
+  - git rebase squash: 将当前 commit 与前一个 commit 合并 
+  - 注意：
+    - 每次 rebase 完成，终端都会跳出 vim 编辑窗口
+    - 不要在 rebase 完成之前 commit，否则 rebase 结束后，在 rebase 期间的 commit 都会被清空
+    - rebase 过程中，我们操作的是一组 commit。右键点击某个 commit 开启 rebase ui 后，该 commit 并不包含在可操作的 commit 中。例如下方图中，点击“第一次提交”开启 ui，能够操作的只有“第二次提交”和“第三次提交”
+    - ![](attachments/gitlens-rebase-ui.png)
+## 流程
+### 任务管理流程
 ```mermaid
 sequenceDiagram
 participant c as course
@@ -61,7 +75,25 @@ f->>c:标记课程进度
 deactivate c
 note over c:结束学习
 ```
-### Q&A
+### rebase 流程
+在 vscode 中使用 gitlens 提供的 rebase interactive UI(简称 rebase ui) 进行 rebase。开始 rebase 时，首先要在 git-rebase-todo 中填写 rebase 操作，rebase UI 是可视化“填写”过程的工具。
+- rebase 操作，在 rebase UI 中点击“switch to text”即可看到 rebase 操作说明，我常用的有：
+  - reword：修改 commit 的信息
+  - squash/fixup：合并当前 commit 到前一个 commit
+- rebase 流程
+```mermaid
+sequenceDiagram
+participant v as vscode
+participant r as rebase ui
+participant g as git-rebase-todo
+participant vi as vim
+autonumber
+v->>r:选择 commit，开启 rebase ui
+r->>g:选择 rebase 操作
+g->>vi:关闭 rebase ui<br>git 自动执行 rebase 操作
+vi->>v:填写操作必需信息，:wq 保存并退出
+```
+## Q&A
 **Q: foam 与 项目代码之间的关系是？**
 
 A: foam 中的内容本质上与 git commit message(以下简称 msg)无异，是与代码绑定的一段文本。该文本用于
