@@ -11,9 +11,11 @@
 ### 初始化
 - 仓库地址：[HenryC-3/FoamC-3: HenryC-3's foam template](https://github.com/HenryC-3/FoamC-3)
 ### 快捷键
-
+> 参考 [VSCode 教程丨阿西河](https://www.axihe.com/tools/vscode/home.html)
+主力机为 Hackintosh，原机键盘为 windows 布局，对左下键盘布局进行了更改，由`crtl | fn | windows | alt` 更改为 `cmd | fn | crtl | alt`
 - 预览：cmd+k,v 或 cmd+shift+v
 - 视图(移动时，鼠标必须聚焦某一窗口上)
+  - 切换 workspace(在多个 vscode 编辑器之间切换)：crtl+w
   - 切换左右编辑器：cmd+shift+[ | ]
   - 切换到之前|后的编辑器：cmd+alt+left | right
   - 切换文件：cmd+p
@@ -108,3 +110,5 @@ foam 增强了 msg，但由于软件因素，无法替代 msg，
 - 绘制流程图前的构思工作
   - 确定起止时间
   - 确定参与对象
+
+### 工作流优化
