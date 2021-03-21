@@ -13,7 +13,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted } from "vue";
+import { defineComponent } from "vue";
+import useTeleportDom from "../hooks/useTeleportDom";
 
 export default defineComponent({
   name: "Loading",
@@ -24,13 +25,7 @@ export default defineComponent({
     }
   },
   setup() {
-    // 创建 teleport 挂载 DOM 节点
-    const loadingDiv = document.createElement("div");
-    loadingDiv.id = "loading";
-    document.body.appendChild(loadingDiv);
-    onUnmounted(() => {
-      document.body.removeChild(loadingDiv);
-    });
+    useTeleportDom("div", "loading");
   }
 });
 </script>
