@@ -18,9 +18,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(
   response => {
     store.commit("setError", { status: false, message: response.data.msg });
-    setTimeout(() => {
-      store.state.loading = false;
-    }, 2000);
+    store.state.loading = false;
     return response;
   },
   e => {

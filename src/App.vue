@@ -1,7 +1,7 @@
 <template>
   <div class="container">
+    <message :error="error"></message>
     <global-header :user="userData"></global-header>
-    <h1 v-if="error.status">错误信息</h1>
     <loading :loading="loading" />
     <router-view></router-view>
   </div>
@@ -11,12 +11,13 @@
 import { computed, defineComponent } from "vue";
 import GlobalHeader from "./components/GlobalHeader.vue";
 import Loading from "./components/Loading.vue";
+import Message from "./components/Message.vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useStore } from "vuex";
 
 export default defineComponent({
   name: "App",
-  components: { GlobalHeader, Loading },
+  components: { GlobalHeader, Loading, Message },
   setup() {
     const store = useStore();
     return {
