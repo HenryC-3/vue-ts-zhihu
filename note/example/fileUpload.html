@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>upload</title>
+  </head>
+  <body>
+    <!-- 
+        当前目录下终端中输入 nc -kdl localhost 8000，点击 submit，查看终端中打印的请求信息
+        将 enctype(编码类型)更改为 
+        multipart/form-data
+        application/x-www-form-urlencoded 
+        text/plain
+        查看 控制台输出的请求信息，比较两者有何不同-->
+    <form action="http://localhost:8000" method="post" enctype="text/plain">
+      <p><input type="text" name="text1" value="text default" /></p>
+      <p><input type="text" name="text2" value="a&#x03C9;b" /></p>
+      <p><input type="file" name="file1" /></p>
+      <p><input type="file" name="file2" /></p>
+      <p><input type="file" name="file3" /></p>
+      <p><button type="submit">Submit</button></p>
+    </form>
+  </body>
+</html>

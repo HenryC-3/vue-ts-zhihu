@@ -1,4 +1,5 @@
 <template>
+  <upload :action="'upload'"></upload>
   <div class="container">
     <column-list :list="data"></column-list>
   </div>
@@ -9,9 +10,10 @@ import { computed, defineComponent, onMounted } from "vue";
 import { useStore } from "vuex";
 import ColumnList from "../components/ColumnList.vue";
 import createMessage from "../components/createMessage";
+import Upload from "../components/Upload.vue";
 export default defineComponent({
   name: "Home",
-  components: { ColumnList },
+  components: { ColumnList, Upload },
   setup() {
     const store = useStore();
     onMounted(() => {

@@ -57,3 +57,4 @@ export interface GlobalStore {
 
 export type TagType = "input" | "textarea";
 export type MessageType = "success" | "error" | "default";
+export type uploadingStatus = "ready" | "success" | "error" | "uploading";
