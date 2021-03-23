@@ -12,7 +12,12 @@ axios.interceptors.request.use(config => {
   store.state.loading = true;
   config.params = { ...config.params, icode: ICODE };
   // 每次POST 请求时会把 icode 放入请求体中
-  config.data = { ...config.data, icode: ICODE };
+  if (config.data instanceof FormData) {
+    config.data.append("icode", ICODE);
+  } else {
+    // 普通的 body 对象，添加到 data 中
+    config.data = { ...config.data, icode: ICODE };
+  }
   return config;
 });
 
