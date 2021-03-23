@@ -112,3 +112,4 @@ foam 增强了 msg，但由于软件因素，无法替代 msg，
   - 确定参与对象
 
 ### 工作流优化
+- [ ] vscode 快速切换到 chrome or Edge [How I Navigate Hundreds of Tabs on Chrome with JXA and Alfred | by Renan Cakirerk | Medium](https://medium.com/@bit2pixel/how-i-navigate-hundreds-of-tabs-on-chrome-with-jxa-and-alfred-9bbf971af02b)

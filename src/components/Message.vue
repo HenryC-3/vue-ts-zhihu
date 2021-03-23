@@ -1,54 +1,51 @@
 <template>
-  <teleport to="#message">
-    <div
-      v-if="isVisible"
-      class="alert global-msg"
-      :class="{ 'alert-success': !error.status, 'alert-danger': error.status }"
-      role="alert"
-    >
-      <span>{{ error.message }}</span>
-      <button
-        type="button"
-        class="btn-close"
-        @click.prevent="hide"
-        aria-label="Close"
-      ></button>
-    </div>
-  </teleport>
+  <div
+    v-if="isVisible"
+    class="alert global-msg"
+    :class="styleClass"
+    role="alert"
+  >
+    <span>{{ message }}</span>
+    <button
+      type="button"
+      class="btn-close"
+      @click.prevent="hide"
+      aria-label="Close"
+    ></button>
+  </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, watch } from "vue";
-import { ErrorProps } from "@/types/types";
-import { useStore } from "vuex";
-import useTeleportDom from "../hooks/useTeleportDom";
+import { defineComponent, PropType, ref } from "vue";
+import { MessageType } from "@/types/types";
 
 export default defineComponent({
   name: "Message",
   props: {
-    error: {
-      type: Object as PropType<ErrorProps>,
+    message: {
+      type: String as PropType<string>,
+      required: true
+    },
+    type: {
+      type: String as PropType<MessageType>,
       required: true
     }
   },
-  setup() {
-    const store = useStore();
-    const isVisible = ref(false);
-    useTeleportDom("div", "message");
-    watch(
-      computed(() => {
-        return store.state.error.message;
-      }),
-      () => {
-        isVisible.value = true;
-      }
-    );
+  setup(props) {
+    const isVisible = ref(true);
+    const styleClass = {
+      "alert-success": props.type === "success",
+      "alert-danger": props.type === "error",
+      "alert-primary": props.type === "default"
+    };
+
     const hide = () => {
       isVisible.value = false;
     };
     return {
       hide,
-      isVisible
+      isVisible,
+      styleClass
     };
   }
 });
