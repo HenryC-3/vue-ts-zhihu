@@ -3,6 +3,7 @@ import App from "./App.vue";
 import { store } from "./utils/store";
 import { router } from "./utils/router";
 import axios from "axios";
+import createMessage from "./components/createMessage";
 
 const ICODE = process.env.VUE_APP_ICODE;
 
@@ -21,8 +22,12 @@ axios.interceptors.response.use(
     store.state.loading = false;
     return response;
   },
-  e => {
-    store.commit("setError", { status: true, message: e.response.data.error });
+  async e => {
+    await store.commit("setError", {
+      status: true,
+      message: e.response.data.error
+    });
+    await createMessage(e.response.data.error, "error");
     store.state.loading = false;
     return Promise.reject(e);
   }
