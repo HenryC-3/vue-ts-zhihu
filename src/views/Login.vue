@@ -31,6 +31,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import ValidateInput from "../components/ValidateInput.vue";
 import { emailRule, passwordRule } from "../utils/validateRules";
+import createMessage from "../components/createMessage";
 
 export default defineComponent({
   name: "Login",
@@ -51,7 +52,10 @@ export default defineComponent({
         store.dispatch("login", payload).then(res => {
           store.dispatch("fetchCurrentUser", res).then(
             res => {
-              router.push({ name: "home" });
+              createMessage("登录成功，即将跳转至首页", "success");
+              setTimeout(() => {
+                router.push({ name: "home" });
+              }, 2000);
             },
             e => {
               console.log(e);
