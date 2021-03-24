@@ -38,7 +38,8 @@ export default defineComponent({
     },
     BeforeUpload: Function
   },
-  setup(props) {
+  emits: ["uploading", "fileUploaded", "uploadedError"],
+  setup(props, context) {
     // NOTE: HTMLInputElement 继承了 HTMLElement
     // [HTMLInputElement - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement)
     // [javascript - why we are using HTMLInputElement in typescript? - Stack Overflow](https://stackoverflow.com/questions/52325814/why-we-are-using-htmlinputelement-in-typescript)
@@ -58,6 +59,7 @@ export default defineComponent({
         formData.append("uploadImg", files[0]);
       }
       uploadingStatus.value = "uploading";
+      context.emit("uploading");
       axios
         .post(props.action, formData, {
           headers: {
@@ -66,9 +68,11 @@ export default defineComponent({
         })
         .then(res => {
           uploadingStatus.value = "success";
+          context.emit("fileUploaded");
         })
         .catch(() => {
           uploadingStatus.value = "error";
+          context.emit("uploadedError");
         });
     };
 

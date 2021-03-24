@@ -1,5 +1,11 @@
 <template>
-  <upload :action="'upload'"></upload>
+  <upload
+    :action="'upload'"
+    :beforeUpload="handleBeforeUpload"
+    @uploading="handleUploading"
+    @fileUploaded="handleFileUploaded"
+    @uploadedError="handleUploadedError"
+  ></upload>
   <div class="container">
     <column-list :list="data"></column-list>
   </div>
@@ -21,7 +27,25 @@ export default defineComponent({
         createMessage("专栏列表已更新", "success");
       });
     });
-    return { data: computed(() => store.state.columns) };
+    const handleUploading = () => {
+      createMessage("上传中", "default");
+    };
+    const handleFileUploaded = () => {
+      createMessage("上传成功", "success");
+    };
+    const handleUploadedError = () => {
+      createMessage("上传失败", "error");
+    };
+    const handleBeforeUpload = () => {
+      //
+    };
+    return {
+      data: computed(() => store.state.columns),
+      handleUploading,
+      handleFileUploaded,
+      handleUploadedError,
+      handleBeforeUpload
+    };
   }
 });
 </script>
