@@ -81,6 +81,12 @@ export default defineComponent({
         .catch(() => {
           uploadingStatus.value = "error";
           context.emit("uploadedError");
+        })
+        .finally(() => {
+          debugger;
+          if (inputRef.value) {
+            inputRef.value.files = null;
+          }
         });
     };
 
