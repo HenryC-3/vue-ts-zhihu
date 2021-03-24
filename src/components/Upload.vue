@@ -19,6 +19,7 @@
       </button>
     </slot>
   </div>
+  <img :src="uploadImgURL" />
   <input type="file" ref="inputRef" class="d-none" @change="handleFileChange" />
 </template>
 
@@ -43,6 +44,7 @@ export default defineComponent({
     // [javascript - why we are using HTMLInputElement in typescript? - Stack Overflow](https://stackoverflow.com/questions/52325814/why-we-are-using-htmlinputelement-in-typescript)
     const inputRef = ref<null | HTMLInputElement>(null);
     const uploadingStatus = ref<uploadingStatus>("ready");
+    const uploadImgURL = ref<string>("");
     const triggerUpload = () => {
       if (inputRef.value) {
         inputRef.value.click();
@@ -74,6 +76,7 @@ export default defineComponent({
         .then(res => {
           uploadingStatus.value = "success";
           context.emit("fileUploaded");
+          uploadImgURL.value = res.data.data.url;
         })
         .catch(() => {
           uploadingStatus.value = "error";
@@ -85,7 +88,8 @@ export default defineComponent({
       inputRef,
       triggerUpload,
       handleFileChange,
-      uploadingStatus
+      uploadingStatus,
+      uploadImgURL
     };
   }
 });
