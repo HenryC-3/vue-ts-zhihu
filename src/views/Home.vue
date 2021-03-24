@@ -36,8 +36,13 @@ export default defineComponent({
     const handleUploadedError = () => {
       createMessage("上传失败", "error");
     };
-    const handleBeforeUpload = () => {
-      //
+    const handleBeforeUpload = (file: File): boolean => {
+      debugger;
+      if (file.type !== "image/png") {
+        createMessage("文件类型必须为 png", "error");
+        return false;
+      }
+      return true;
     };
     return {
       data: computed(() => store.state.columns),

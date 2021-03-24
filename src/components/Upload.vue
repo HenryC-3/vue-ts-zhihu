@@ -36,7 +36,7 @@ export default defineComponent({
       type: String,
       required: true
     },
-    BeforeUpload: Function
+    beforeUpload: Function
   },
   emits: ["uploading", "fileUploaded", "uploadedError"],
   setup(props, context) {
@@ -57,6 +57,13 @@ export default defineComponent({
       if (currentTarget.files) {
         const files = Array.from(currentTarget.files);
         formData.append("uploadImg", files[0]);
+        if (props.beforeUpload) {
+          // 如果文件验证失败，不进行后续操作
+          if (!props.beforeUpload(files[0])) {
+            uploadingStatus.value = "error";
+            return;
+          }
+        }
       }
       uploadingStatus.value = "uploading";
       context.emit("uploading");
