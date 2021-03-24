@@ -1,26 +1,24 @@
 <template>
-  <button
-    v-if="uploadingStatus === 'ready'"
-    class="btn btn-primary"
-    @click.prevent="triggerUpload"
-  >
-    点击上传
-  </button>
-  <button v-else-if="uploadingStatus === 'uploading'">正在上传</button>
-  <button
-    v-else-if="uploadingStatus === 'success'"
-    class="btn btn-success"
-    @click.prevent="triggerUpload"
-  >
-    上传成功, 重新上传
-  </button>
-  <button
-    v-else-if="uploadingStatus === 'error'"
-    class="btn btn-danger"
-    @click.prevent="triggerUpload"
-  >
-    上传失败，重新上传
-  </button>
+  <div @click.prevent="triggerUpload">
+    <slot v-if="uploadingStatus === 'ready'" name="ready">
+      <button class="btn btn-primary">
+        点击上传
+      </button>
+    </slot>
+    <slot v-else-if="uploadingStatus === 'uploading'" name="uploading">
+      <button class="btn btn-primary is-disabled">正在上传</button>
+    </slot>
+    <slot v-else-if="uploadingStatus === 'success'" name="success">
+      <button class="btn btn-success">
+        上传成功, 重新上传
+      </button>
+    </slot>
+    <slot v-else-if="uploadingStatus === 'error'" name="error">
+      <button class="btn btn-danger">
+        上传失败，重新上传
+      </button>
+    </slot>
+  </div>
   <input type="file" ref="inputRef" class="d-none" @change="handleFileChange" />
 </template>
 

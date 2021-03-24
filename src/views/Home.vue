@@ -5,7 +5,15 @@
     @uploading="handleUploading"
     @fileUploaded="handleFileUploaded"
     @uploadedError="handleUploadedError"
-  ></upload>
+  >
+    <template #uploading>
+      <button class="btn btn-primary is-disabled">
+        <div class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </button>
+    </template>
+  </upload>
   <div class="container">
     <column-list :list="data"></column-list>
   </div>
@@ -37,7 +45,6 @@ export default defineComponent({
       createMessage("上传失败", "error");
     };
     const handleBeforeUpload = (file: File): boolean => {
-      debugger;
       if (file.type !== "image/png") {
         createMessage("文件类型必须为 png", "error");
         return false;
