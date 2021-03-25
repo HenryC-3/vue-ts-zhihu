@@ -64,10 +64,7 @@ export const store = createStore<GlobalStore>({
       return axios
         .post(`user/login`, payload)
         .then(res => {
-          // VIEW: 需要将 axios 设置相关的代码放到单独文件中管理吗？ 分散在这里是不是不方便管理？
-          // 现在每次请求都会带上 token
           localStorage.setItem("token", res.data.data.token);
-          axios.defaults.headers.common.Authorization = `Bearer ${res.data.data.token}`;
           context.commit("login", res.data);
           return res.data.data;
         })
