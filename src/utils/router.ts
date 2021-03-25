@@ -54,6 +54,8 @@ router.beforeEach((to, from, next) => {
           redirectAlreadyLogin ? next("/") : next();
         })
         .catch(e => {
+          // 考虑 token 被篡改的情况，当使用当前 token 请求失败时，清除 token
+          localStorage.setItem("token", "");
           createMessage("登录过期，请重新登录", "error");
           next("login");
         });
