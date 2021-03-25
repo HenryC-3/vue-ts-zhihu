@@ -36,23 +36,23 @@ export const store = createStore<GlobalStore>({
   },
   actions: {
     fetchColumns(context) {
-      axios.get("columns").then(res => {
+      axios.get("/columns").then(res => {
         context.commit("fetchColumns", res.data);
       });
     },
     fetchColumn(context, payload) {
-      axios.get(`columns/${payload.columnId}`).then(res => {
+      axios.get(`/columns/${payload.columnId}`).then(res => {
         context.commit("fetchColumn", res.data);
       });
     },
     fetchPosts(context, payload) {
-      axios.get(`columns/${payload.columnId}/posts`).then(res => {
+      axios.get(`/columns/${payload.columnId}/posts`).then(res => {
         context.commit("fetchPosts", res.data);
       });
     },
     fetchCurrentUser(context) {
       return axios
-        .get("user/current")
+        .get("/user/current")
         .then(res => {
           context.commit("fetchCurrentUser", res.data);
         })
@@ -62,7 +62,7 @@ export const store = createStore<GlobalStore>({
     },
     login(context, payload) {
       return axios
-        .post(`user/login`, payload)
+        .post(`/user/login`, payload)
         .then(res => {
           localStorage.setItem("token", res.data.data.token);
           context.commit("login", res.data);

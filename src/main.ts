@@ -7,7 +7,7 @@ import createMessage from "./components/createMessage";
 
 const ICODE = process.env.VUE_APP_ICODE;
 
-axios.defaults.baseURL = "http://apis.imooc.com/api/";
+axios.defaults.baseURL = "http://apis.imooc.com/api";
 axios.interceptors.request.use(config => {
   store.state.loading = true;
   config.params = { ...config.params, icode: ICODE };

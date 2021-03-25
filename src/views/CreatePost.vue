@@ -61,6 +61,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const columnId = store.state.user.columnId;
+    // BUG:此处未接入后端 API，新建的文章临时储存在 vuex 中
     const onPostSubmit = (result: boolean) => {
       if (result) {
         const post: PostProps = {
