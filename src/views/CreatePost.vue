@@ -1,4 +1,19 @@
 <template>
+  <upload
+    :action="'upload'"
+    :beforeUpload="handleBeforeUpload"
+    @uploading="handleUploading"
+    @fileUploaded="handleFileUploaded"
+    @uploadedError="handleUploadedError"
+  >
+    <template #uploading>
+      <button class="btn btn-primary is-disabled">
+        <div class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </button>
+    </template>
+  </upload>
   <h3>新建文章</h3>
   <validate-form @form-submit="onPostSubmit">
     <template #default>
@@ -32,11 +47,13 @@ import { ref } from "vue";
 import { useStore } from "vuex";
 import ValidateForm from "@/components/ValidateForm.vue";
 import ValidateInput from "../components/ValidateInput.vue";
+import Upload from "../components/Upload.vue";
 import { postTitleRule, postContentRule } from "../utils/validateRules";
+import createMessage from "../components/createMessage";
 import { useRouter } from "vue-router";
 export default defineComponent({
   name: "CreatePost",
-  components: { ValidateInput, ValidateForm },
+  components: { ValidateInput, ValidateForm, Upload },
   setup() {
     const title = ref("");
     const content = ref("");
@@ -59,13 +76,33 @@ export default defineComponent({
         router.push({ path: `/column/${columnId}` });
       }
     };
+    const handleUploading = () => {
+      createMessage("上传中", "default");
+    };
+    const handleFileUploaded = () => {
+      createMessage("上传成功", "success");
+    };
+    const handleUploadedError = () => {
+      createMessage("上传失败", "error");
+    };
+    const handleBeforeUpload = (file: File): boolean => {
+      if (file.type !== "image/png") {
+        createMessage("文件类型必须为 png", "error");
+        return false;
+      }
+      return true;
+    };
     return {
       textarea,
       postTitleRule,
       postContentRule,
       title,
       content,
-      onPostSubmit
+      onPostSubmit,
+      handleUploading,
+      handleFileUploaded,
+      handleUploadedError,
+      handleBeforeUpload
     };
   }
 });

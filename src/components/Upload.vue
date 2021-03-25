@@ -83,7 +83,6 @@ export default defineComponent({
           context.emit("uploadedError");
         })
         .finally(() => {
-          debugger;
           if (inputRef.value) {
             inputRef.value.files = null;
           }
