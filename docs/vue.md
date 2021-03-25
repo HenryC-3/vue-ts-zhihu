@@ -1,24 +1,29 @@
 ## 如何设计一个组件
-- 设计组件时，通常需要考虑以下要素：
-  - 组件的位置
-    - 全局组件，teleport
-    - 容器组件，slot
-    - 根组件，`<router-view>`
-    - 视图组件
-    - 子组件
-  - 组件的参数
-    - props
-    - attributes
-    - emits
-  - 组件的样式
-    - 组件的 dom 元素
-    - 组件的 style
-  - 组件的行为
-    - 什么时候展示/隐藏组件
-    - 组件依靠哪些数据？
-      - 异步数据
-      - 同步数据
--注意：
+<details style="margin-left:23px">
+<summary>设计组件需要考虑的要素</summary>
+
+- 组件的位置
+  - 全局组件，teleport
+  - 容器组件，slot
+  - 根组件，`<router-view>`
+    - 视图组件  
+      - 子组件
+- 组件的参数
+  - props
+  - attributes
+  - emits
+- 组件的样式
+  - 组件的 dom 元素
+  - 组件的 style
+- 组件的行为
+  - 什么时候展示/隐藏组件
+- 组件依靠哪些数据？
+  - 组件内部数据
+  - 从父组件传递过来的数据
+  - 从 vuex 中获取的数据
+</details>
+
+- 注意：
   - 视图传递数据给子组件
 - 视图组件中的任务：
   - 设置初始数据：ref reactive

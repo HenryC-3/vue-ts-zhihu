@@ -39,6 +39,7 @@ export const router = createRouter({
 // NOTE：使用路由 meta 的意义是？
 // - 很多时候跳转路由的逻辑是：如果满足了条件 A，那么就跳转路由。逻辑上，该条件与该路由是绑定在一起，因此可以放在 meta 信息中，方便管理
 // - 借助 vue-router 钩子，可以读取当前路由的 meta 信息，编写跳转逻辑
+// IMPR: 逻辑不够清晰，有待改善
 router.beforeEach((to, from, next) => {
   const { user, token } = store.state;
   const { redirectAlreadyLogin, requiredLogin } = to.meta;
@@ -54,7 +55,6 @@ router.beforeEach((to, from, next) => {
           redirectAlreadyLogin ? next("/") : next();
         })
         .catch(e => {
-          // 考虑 token 被篡改的情况，当使用当前 token 请求失败时，清除 token
           localStorage.setItem("token", "");
           createMessage("登录过期，请重新登录", "error");
           next("login");
