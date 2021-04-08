@@ -1,5 +1,9 @@
 <template>
-  <div @click.prevent="triggerUpload">
+  <div
+    class="file-upload-container"
+    @click.prevent="triggerUpload"
+    v-bind="$attrs"
+  >
     <slot v-if="uploadingStatus === 'ready'" name="ready">
       <button class="btn btn-primary">
         点击上传
@@ -9,9 +13,7 @@
       <button class="btn btn-primary is-disabled">正在上传</button>
     </slot>
     <slot v-else-if="uploadingStatus === 'success'" name="success">
-      <button class="btn btn-success">
-        上传成功, 重新上传
-      </button>
+      <img :src="uploadImgURL" class="file-upload-image" />
     </slot>
     <slot v-else-if="uploadingStatus === 'error'" name="error">
       <button class="btn btn-danger">
@@ -19,12 +21,12 @@
       </button>
     </slot>
   </div>
-  <img :src="uploadImgURL" />
   <input type="file" ref="inputRef" class="d-none" @change="handleFileChange" />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+// eslint-disable-next-line
 import { uploadingStatus } from "../types/types";
 import axios from "axios";
 
@@ -99,3 +101,15 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+.file-upload-container {
+  height: 200px;
+  cursor: pointer;
+}
+.file-upload-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+</style>

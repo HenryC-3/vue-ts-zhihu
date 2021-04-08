@@ -1,20 +1,25 @@
 <template>
+  <h3>新建文章</h3>
   <upload
-    :action="'upload'"
+    :action="'/upload'"
     :beforeUpload="handleBeforeUpload"
     @uploading="handleUploading"
     @fileUploaded="handleFileUploaded"
     @uploadedError="handleUploadedError"
+    class="d-flex justify-content-center align-items-center bg-light text-secondary w-100 my-4"
   >
+    <template #ready>
+      <h2>点击上传头图</h2>
+    </template>
     <template #uploading>
-      <button class="btn btn-primary is-disabled">
-        <div class="spinner-border" role="status">
-          <span class="sr-only"></span>
+      <div class="d-flex">
+        <div class="spinner-border text-secondary" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
-      </button>
+        <h2>正在上传</h2>
+      </div>
     </template>
   </upload>
-  <h3>新建文章</h3>
   <validate-form @form-submit="onPostSubmit">
     <template #default>
       <p>文章标题：</p>
