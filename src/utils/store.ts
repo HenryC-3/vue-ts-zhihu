@@ -1,13 +1,14 @@
 import { GlobalStore, PostProps } from "@/types/types";
 import { createStore } from "vuex";
 import axios from "axios";
+import { arrToObj } from "../utils/helper";
 
 export const store = createStore<GlobalStore>({
   state: {
     error: { status: false },
     token: localStorage.getItem("token") || "",
     columns: [],
-    posts: [],
+    posts: { data: {} },
     user: { isLogin: false },
     loading: false
   },
@@ -16,7 +17,7 @@ export const store = createStore<GlobalStore>({
       state.token = rawData.token;
     },
     createPost(state, post: PostProps) {
-      state.posts.push(post);
+      state.posts.data[post._id] = post;
     },
     fetchColumns(state, rowData) {
       state.columns = rowData.data.list;
@@ -25,7 +26,10 @@ export const store = createStore<GlobalStore>({
       state.columns = [rowData.data];
     },
     fetchPosts(state, rowData) {
-      state.posts = rowData.data.list;
+      state.posts.data = {
+        ...state.posts.data,
+        ...arrToObj(rowData.data.list)
+      };
     },
     fetchCurrentUser(state, rowData) {
       state.user = { isLogin: true, ...rowData.data };

@@ -45,7 +45,7 @@ export default defineComponent({
     });
     return {
       // 现在直接返回对应专栏文章列表，无需过滤
-      posts: computed(() => store.state.posts),
+      posts: computed(() => Object.values(store.state.posts.data)),
       column
     };
   }

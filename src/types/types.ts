@@ -50,7 +50,9 @@ export interface GlobalStore {
   error: ErrorProps;
   token: string;
   columns: ColumnProps[];
-  posts: PostProps[];
+  posts: {
+    data: ListProps<PostProps>;
+  };
   user: UserProps;
   loading: boolean;
 }
@@ -58,6 +60,10 @@ export interface GlobalStore {
 export interface ImageCheckCondition {
   type?: string[];
   size?: number;
+}
+
+export interface ListProps<T> {
+  [key: string]: T;
 }
 
 export type ImageCheckErrorType = "format" | "size" | null;
