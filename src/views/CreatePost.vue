@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { PostProps } from "@/types/types";
+import { ImageProps, PostProps } from "@/types/types";
 import { defineComponent } from "@vue/runtime-core";
 import { ref } from "vue";
 import { useStore } from "vuex";
@@ -63,30 +63,43 @@ export default defineComponent({
   setup() {
     const title = ref("");
     const content = ref("");
+    const imageId = ref("");
     const textarea = "textarea";
     const store = useStore();
     const router = useRouter();
-    const columnId = store.state.user.columnId;
-    // BUG:此处未接入后端 API，新建的文章临时储存在 vuex 中
+    const { column, nickName } = store.state.user;
+
     const onPostSubmit = (result: boolean) => {
       if (result) {
-        const post: PostProps = {
-          _id: Math.floor(Math.random() * 10).toString(),
-          excerpt: "",
+        const post = {
           content: content.value,
           title: title.value,
-          createdAt: new Date().toDateString(),
-          // 用户创建的文章，包含在该用户的创建的专栏中，用 columnId 标识该文章属于哪个专栏
-          columnId: columnId
+          image: imageId.value,
+          column: column,
+          author: nickName
         };
-        store.commit("createPost", post);
-        router.push({ path: `/column/${columnId}` });
+        // BUG: 创建文章失败，返回 500 错误，可能是服务器故障或者字段参数错误
+        store
+          .dispatch("createPost", { post })
+          .then(res => {
+            createMessage("创建成功，即将跳转至专栏页", "success");
+            setTimeout(() => {
+              router.push({ path: `/column/${column}` });
+            }, 1000);
+          })
+          .catch(e => {
+            createMessage("创建失败，即将跳转至首页", "error");
+            setTimeout(() => {
+              router.push({ path: `/` });
+            }, 1000);
+          });
       }
     };
     const handleUploading = () => {
       createMessage("上传中", "default");
     };
-    const handleFileUploaded = () => {
+    const handleFileUploaded = (rawData: ImageProps) => {
+      imageId.value = rawData._id;
       createMessage("上传成功", "success");
     };
     const handleUploadedError = () => {

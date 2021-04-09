@@ -53,6 +53,11 @@ export const store = createStore<GlobalStore>({
         context.commit("fetchColumn", res.data);
       });
     },
+    createPost(context, payload) {
+      return axios.post("posts", payload.post).then(res => {
+        context.commit("createPost", res.data);
+      });
+    },
     fetchPosts(context, payload) {
       axios.get(`/columns/${payload.columnId}/posts`).then(res => {
         context.commit("fetchPosts", res.data);

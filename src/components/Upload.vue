@@ -77,8 +77,8 @@ export default defineComponent({
         })
         .then(res => {
           uploadingStatus.value = "success";
-          context.emit("fileUploaded");
           uploadImgURL.value = res.data.data.url;
+          context.emit("fileUploaded", res.data.data);
         })
         .catch(() => {
           uploadingStatus.value = "error";
