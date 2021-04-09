@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import ColumnDetail from "../views/ColumnDetail.vue";
 import CreatePost from "../views/CreatePost.vue";
+import PostDetail from "../views/PostDetail.vue";
 import { store } from "../utils/store";
 import axios from "axios";
 import createMessage from "@/components/createMessage";
@@ -26,6 +27,11 @@ export const router = createRouter({
       path: "/column/:id",
       name: "column",
       component: ColumnDetail
+    },
+    {
+      path: "/post/:id",
+      name: "post",
+      component: PostDetail
     },
     {
       path: "/create",

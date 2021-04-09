@@ -31,6 +31,10 @@ export const store = createStore<GlobalStore>({
         ...arrToObj(rowData.data.list)
       };
     },
+
+    fetchPost(state, rawData) {
+      state.posts.data[rawData.data._id] = rawData.data;
+    },
     fetchCurrentUser(state, rowData) {
       state.user = { isLogin: true, ...rowData.data };
     },
@@ -52,6 +56,11 @@ export const store = createStore<GlobalStore>({
     fetchPosts(context, payload) {
       axios.get(`/columns/${payload.columnId}/posts`).then(res => {
         context.commit("fetchPosts", res.data);
+      });
+    },
+    fetchPost(context, payload) {
+      axios.get(`/posts/${payload.postId}`).then(res => {
+        context.commit("fetchPost", res.data);
       });
     },
     fetchCurrentUser(context) {
