@@ -56,6 +56,7 @@ import Upload from "../components/Upload.vue";
 import { postTitleRule, postContentRule } from "../utils/validateRules";
 import createMessage from "../components/createMessage";
 import { useRouter } from "vue-router";
+import imageCheck from "../utils/imageCheck";
 export default defineComponent({
   name: "CreatePost",
   components: { ValidateInput, ValidateForm, Upload },
@@ -92,11 +93,18 @@ export default defineComponent({
       createMessage("上传失败", "error");
     };
     const handleBeforeUpload = (file: File): boolean => {
-      if (file.type !== "image/png") {
+      const { passed, error } = imageCheck(file, {
+        type: ["image/png"],
+        size: 1
+      });
+
+      if (error === "format") {
         createMessage("文件类型必须为 png", "error");
-        return false;
+      } else {
+        createMessage("文件过大", "error");
       }
-      return true;
+
+      return passed;
     };
     return {
       textarea,

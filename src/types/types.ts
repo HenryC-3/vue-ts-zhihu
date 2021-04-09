@@ -55,6 +55,12 @@ export interface GlobalStore {
   loading: boolean;
 }
 
+export interface ImageCheckCondition {
+  type?: string[];
+  size?: number;
+}
+
+export type ImageCheckErrorType = "format" | "size" | null;
 export type TagType = "input" | "textarea";
 export type MessageType = "success" | "error" | "default";
 export type uploadingStatus = "ready" | "success" | "error" | "uploading";

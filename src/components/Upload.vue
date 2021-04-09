@@ -110,6 +110,7 @@ export default defineComponent({
 .file-upload-image {
   height: 100%;
   width: 100%;
+  /* NOTE:保证图片比例 */
   object-fit: cover;
 }
 </style>
