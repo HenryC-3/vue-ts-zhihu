@@ -1,3 +1,4 @@
+import { AvatarProps, ColumnProps } from "../types/types";
 // 将 [ {_id:"xxxx"} ] 转化为 {_id:{_id:"xxxx"}}
 export const arrToObj = <T extends { _id?: string }>(arr: Array<T>) => {
   return arr.reduce((prev, current) => {
@@ -7,6 +8,13 @@ export const arrToObj = <T extends { _id?: string }>(arr: Array<T>) => {
     return prev;
   }, {} as { [key: string]: T });
 };
+
+export function addColumnAvatar(column: ColumnProps) {
+  const defaultAvatar: AvatarProps = {
+    url: require("@/assets/defaultImg.jpg")
+  };
+  column.avatar = defaultAvatar;
+}
 
 /**
 NOTE：该函数的 TS 声明意思是

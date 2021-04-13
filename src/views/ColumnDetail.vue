@@ -18,7 +18,7 @@
 <script lang="ts">
 import PostList from "@/components/PostList.vue";
 import { PostProps } from "@/types/types";
-import addColumnAvatar from "@/utils/addColumnAvatar";
+import { addColumnAvatar } from "@/utils/helper";
 import { computed, defineComponent, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";

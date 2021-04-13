@@ -29,7 +29,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
 import { ColumnProps } from "../types/types";
-import addColumnAvatar from "../utils/addColumnAvatar";
+import { addColumnAvatar } from "../utils/helper";
 
 export default defineComponent({
   name: "ColumnList",
