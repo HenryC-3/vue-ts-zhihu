@@ -43,31 +43,37 @@ export const store = createStore<GlobalStore>({
     }
   },
   actions: {
+    // 获取抓专栏列表
     fetchColumns(context) {
       axios.get("/columns").then(res => {
         context.commit("fetchColumns", res.data);
       });
     },
+    // 获取专栏详情
     fetchColumn(context, payload) {
       axios.get(`/columns/${payload.columnId}`).then(res => {
         context.commit("fetchColumn", res.data);
       });
     },
+    // 创建一篇文章
     createPost(context, payload) {
       return axios.post("posts", payload.post).then(res => {
         context.commit("createPost", res.data);
       });
     },
+    // 获取对应专栏文章
     fetchPosts(context, payload) {
       axios.get(`/columns/${payload.columnId}/posts`).then(res => {
         context.commit("fetchPosts", res.data);
       });
     },
+    // 获取一篇文章
     fetchPost(context, payload) {
       axios.get(`/posts/${payload.postId}`).then(res => {
         context.commit("fetchPost", res.data);
       });
     },
+    // 获取登录用户信息
     fetchCurrentUser(context) {
       return axios
         .get("/user/current")
@@ -78,6 +84,7 @@ export const store = createStore<GlobalStore>({
           return Promise.reject(e);
         });
     },
+    // 获取 token
     login(context, payload) {
       return axios
         .post(`/user/login`, payload)
