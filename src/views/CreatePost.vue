@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { ImageProps, PostProps } from "@/types/types";
+import { ImageProps } from "@/types/types";
 import { defineComponent } from "@vue/runtime-core";
 import { ref } from "vue";
 import { useStore } from "vuex";
@@ -67,7 +67,7 @@ export default defineComponent({
     const textarea = "textarea";
     const store = useStore();
     const router = useRouter();
-    const { column, nickName } = store.state.user;
+    const { column, _id } = store.state.user;
 
     const onPostSubmit = (result: boolean) => {
       if (result) {
@@ -76,9 +76,8 @@ export default defineComponent({
           title: title.value,
           image: imageId.value,
           column: column,
-          author: nickName
+          author: _id
         };
-        // BUG: 创建文章失败，返回 500 错误，可能是服务器故障或者字段参数错误
         store
           .dispatch("createPost", { post })
           .then(res => {

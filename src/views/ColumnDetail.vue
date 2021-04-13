@@ -17,6 +17,7 @@
 
 <script lang="ts">
 import PostList from "@/components/PostList.vue";
+import { PostProps } from "@/types/types";
 import addColumnAvatar from "@/utils/addColumnAvatar";
 import { computed, defineComponent, onMounted } from "vue";
 import { useRoute } from "vue-router";
@@ -43,9 +44,15 @@ export default defineComponent({
       }
       return selectedColumn;
     });
+
+    const currentColumnPosts = computed(() => {
+      const posts = Object.values(store.state.posts.data) as PostProps[];
+      return posts.filter(post => {
+        return post.column === route.params.id;
+      });
+    });
     return {
-      // 现在直接返回对应专栏文章列表，无需过滤
-      posts: computed(() => Object.values(store.state.posts.data)),
+      posts: currentColumnPosts,
       column
     };
   }

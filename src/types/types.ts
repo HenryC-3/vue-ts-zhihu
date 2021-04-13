@@ -38,7 +38,7 @@ export interface PostProps {
   content: string;
   image?: ImageProps;
   createdAt: string;
-  columnId: number;
+  column: string;
 }
 
 export interface ErrorProps {
