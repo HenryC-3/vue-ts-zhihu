@@ -17,6 +17,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.0-beta2",
     "core-js": "^3.6.5",
+    "markdown-it": "^12.0.4",
     "mitt": "^2.1.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.4",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.0.1",
     "@commitlint/config-conventional": "^12.0.1",
+    "@types/markdown-it": "^12.0.1",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",

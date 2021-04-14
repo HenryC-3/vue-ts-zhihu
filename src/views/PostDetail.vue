@@ -32,12 +32,14 @@ import { useRoute } from "vue-router";
 import { computed, onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import UserProfile from "../components/UserProfile.vue";
+import markdownIt from "markdown-it";
 export default {
   name: "PostDetail",
   components: { UserProfile },
   setup() {
     const route = useRoute();
     const store = useStore();
+    const md = new markdownIt();
     onMounted(() => {
       store.dispatch("fetchPost", { postId: route.params.id });
     });
@@ -57,8 +59,8 @@ export default {
 
     const currentHTML = computed(() => {
       if (currentPost.value && currentPost.value.content) {
-        const { content } = currentPost.value;
-        return content;
+        const { content, isHTML } = currentPost.value;
+        return isHTML ? content : md.render(content);
       }
     });
 
