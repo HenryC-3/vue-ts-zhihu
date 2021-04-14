@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { ImageProps } from "@/types/types";
+import { AvatarProps } from "@/types/types";
 import { defineComponent } from "@vue/runtime-core";
 import { ref } from "vue";
 import { useStore } from "vuex";
@@ -63,7 +63,7 @@ export default defineComponent({
   setup() {
     const title = ref("");
     const content = ref("");
-    const imageId = ref("");
+    const imageId = ref<string | undefined>("");
     const textarea = "textarea";
     const store = useStore();
     const router = useRouter();
@@ -97,7 +97,7 @@ export default defineComponent({
     const handleUploading = () => {
       createMessage("上传中", "default");
     };
-    const handleFileUploaded = (rawData: ImageProps) => {
+    const handleFileUploaded = (rawData: AvatarProps) => {
       imageId.value = rawData._id;
       createMessage("上传成功", "success");
     };

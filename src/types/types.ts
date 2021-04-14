@@ -9,6 +9,7 @@ export interface AvatarProps {
   _id?: string;
   url?: string;
   createdAt?: string;
+  fitUrl?: string;
 }
 export interface RuleProp {
   type: "required" | "email";
@@ -24,21 +25,19 @@ export interface UserProps {
   nickName?: string;
   _id?: string;
   columnId?: string;
-}
-
-export interface ImageProps {
-  _id: string;
-  url: string;
-  createdAt: string;
+  description?: string;
+  avatar?: AvatarProps;
 }
 export interface PostProps {
   _id: string;
   title: string;
   excerpt: string;
   content: string;
-  image?: ImageProps;
+  image?: AvatarProps;
   createdAt: string;
   column: string;
+  isHTML?: boolean;
+  author?: string | UserProps;
 }
 
 export interface ErrorProps {
