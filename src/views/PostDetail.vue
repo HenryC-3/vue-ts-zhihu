@@ -1,28 +1,71 @@
 <template>
-  <header>{{ post.content }}</header>
+  <div>
+    <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
+      <img
+        :src="currentImageUrl"
+        alt="currentPost.title"
+        class="rounded-lg img-fluid my-4"
+        v-if="currentImageUrl"
+      />
+      <h2 class="mb-4">{{ currentPost.title }}</h2>
+      <div
+        class="user-profile-component border-top border-bottom py-3 mb-5 align-items-center row g-0"
+      >
+        <div class="col">
+          <user-profile
+            :user="currentPost.author"
+            v-if="typeof currentPost.author === 'object'"
+          ></user-profile>
+        </div>
+        <span class="text-muted col text-right font-italic"
+          >发表于：{{ currentPost.createdAt }}</span
+        >
+      </div>
+      <div v-html="currentHTML"></div>
+    </article>
+  </div>
 </template>
 
 <script lang="ts">
-import { ListProps, PostProps } from "../types/types";
+import { PostProps, AvatarProps } from "../types/types";
 import { useRoute } from "vue-router";
 import { computed, onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
+import UserProfile from "../components/UserProfile.vue";
 export default {
   name: "PostDetail",
+  components: { UserProfile },
   setup() {
     const route = useRoute();
     const store = useStore();
-
-    const post = computed(() => {
-      const posts = store.state.posts.data as ListProps<PostProps>;
-      return posts[route.params.id as string];
-    });
     onMounted(() => {
       store.dispatch("fetchPost", { postId: route.params.id });
     });
 
+    const currentPost = computed<PostProps>(() =>
+      store.getters.getCurrentPost(route.params.id)
+    );
+
+    const currentImageUrl = computed(() => {
+      if (currentPost.value && currentPost.value.image) {
+        const { image } = currentPost.value;
+        return (image as AvatarProps).url + "?x-oss-process=image/resize,w_850";
+      } else {
+        return null;
+      }
+    });
+
+    const currentHTML = computed(() => {
+      if (currentPost.value && currentPost.value.content) {
+        const { content } = currentPost.value;
+        return content;
+      }
+    });
+
     return {
-      post: post
+      currentPost,
+      currentImageUrl,
+      currentHTML
     };
   }
 };

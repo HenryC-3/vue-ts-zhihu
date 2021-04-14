@@ -101,6 +101,9 @@ export const store = createStore<GlobalStore>({
   getters: {
     getColumnById: state => (id: string) => {
       return state.columns.find(c => c._id === id) || [];
+    },
+    getCurrentPost: state => (id: string) => {
+      return state.posts.data[id];
     }
   }
 });
