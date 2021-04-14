@@ -1,18 +1,24 @@
 <template>
   <!-- ColumnDetail Header -->
-  <div class="card col-8 border-0 flex-row" style="margin:50px auto 100px auto">
-    <div class="card-body">
-      <h5 class="card-title">{{ column.title }}</h5>
-      <p class="card-text">
-        {{ column.description }}
-      </p>
+  <div class="column-detail-page w-75 mx-auto">
+    <div
+      class="column-info row mb-4 border-bottom pb-4 align-items-center"
+      v-if="column"
+    >
+      <div class="col-3 text-center">
+        <img
+          :src="column.avatar && column.avatar.fitUrl"
+          :alt="column.title"
+          class="rounded-circle border w-100"
+        />
+      </div>
+      <div class="col-9">
+        <h4>{{ column.title }}</h4>
+        <p class="text-muted">{{ column.description }}</p>
+      </div>
     </div>
-    <img
-      :src="column.avatar && column.avatar.url"
-      class="rounded-circle border border-light me-5"
-    />
+    <post-list :posts="posts"></post-list>
   </div>
-  <post-list :posts="posts"></post-list>
 </template>
 
 <script lang="ts">
