@@ -29,12 +29,12 @@ axios.interceptors.response.use(
     store.state.loading = false;
     return response;
   },
-  async e => {
-    await store.commit("setError", {
+  e => {
+    store.commit("setError", {
       status: true,
       message: e.response.data.error
     });
-    await createMessage(e.response.data.error, "error");
+    createMessage(e.response.data.error, "error");
     store.state.loading = false;
     return Promise.reject(e);
   }

@@ -61,6 +61,12 @@ export const store = createStore<GlobalStore>({
         context.commit("createPost", res.data);
       });
     },
+    // 修改一篇文章
+    modifyPost(context, payload) {
+      axios.patch(`posts/${payload.post.postId}`, payload.post).then(res => {
+        context.commit("createPost", res.data);
+      });
+    },
     // 获取对应专栏文章
     fetchPosts(context, payload) {
       axios.get(`/columns/${payload.columnId}/posts`).then(res => {
@@ -69,7 +75,7 @@ export const store = createStore<GlobalStore>({
     },
     // 获取一篇文章
     fetchPost(context, payload) {
-      axios.get(`/posts/${payload.postId}`).then(res => {
+      return axios.get(`/posts/${payload.postId}`).then(res => {
         context.commit("fetchPost", res.data);
       });
     },

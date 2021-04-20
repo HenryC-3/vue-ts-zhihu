@@ -1,5 +1,5 @@
 <template>
-  <h3>新建文章</h3>
+  <h3 v-if="!postId">新建文章</h3>
   <upload
     :action="'/upload'"
     :beforeUpload="handleBeforeUpload"
@@ -39,7 +39,8 @@
     </template>
     <template #submit>
       <button type="submit" class="btn btn-primary btn-outline-light">
-        发布文章
+        <div v-if="!postId">发布文章</div>
+        <div v-else>更新文章</div>
       </button>
     </template>
   </validate-form>
@@ -47,7 +48,7 @@
 
 <script lang="ts">
 import { AvatarProps } from "@/types/types";
-import { defineComponent } from "@vue/runtime-core";
+import { computed, defineComponent } from "@vue/runtime-core";
 import { ref } from "vue";
 import { useStore } from "vuex";
 import ValidateForm from "@/components/ValidateForm.vue";
@@ -55,7 +56,7 @@ import ValidateInput from "../components/ValidateInput.vue";
 import Upload from "../components/Upload.vue";
 import { postTitleRule, postContentRule } from "../utils/validateRules";
 import createMessage from "../components/createMessage";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import imageCheck from "../utils/imageCheck";
 export default defineComponent({
   name: "CreatePost",
@@ -67,8 +68,26 @@ export default defineComponent({
     const textarea = "textarea";
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
+    const postId = route.query.postId;
+    const post = computed(() => store.state.posts.data[postId as string]);
     const { column, _id } = store.state.user;
 
+    // 根据 postId 判断是否为修改状态
+    // 如果该 Id 对应的文章在 store 中存在，则直接从 store 中读取数据，并填充到输入框中
+    if (postId) {
+      if (post.value) {
+        const { title: currTitle, content: currContent } = post.value;
+        title.value = currTitle;
+        content.value = currContent;
+      } else {
+        store.dispatch("fetchPost", { postId }).then(() => {
+          const { title: currTitle, content: currContent } = post.value;
+          title.value = currTitle;
+          content.value = currContent;
+        });
+      }
+    }
     const onPostSubmit = (result: boolean) => {
       if (result) {
         const post = {
@@ -76,18 +95,22 @@ export default defineComponent({
           title: title.value,
           image: imageId.value,
           column: column,
-          author: _id
+          author: _id,
+          postId
         };
+
+        // 新建文章
+        const action = postId ? "modifyPost" : "createPost";
         store
-          .dispatch("createPost", { post })
+          .dispatch(action, { post })
           .then(res => {
-            createMessage("创建成功，即将跳转至专栏页", "success");
+            createMessage("成功，即将跳转至专栏页", "success");
             setTimeout(() => {
               router.push({ path: `/column/${column}` });
             }, 1000);
           })
           .catch(e => {
-            createMessage("创建失败，即将跳转至首页", "error");
+            createMessage("失败，即将跳转至首页", "error");
             setTimeout(() => {
               router.push({ path: `/` });
             }, 1000);
@@ -109,7 +132,6 @@ export default defineComponent({
         type: ["image/png"],
         size: 1
       });
-
       if (error === "format") {
         createMessage("文件类型必须为 png", "error");
       } else {
@@ -128,7 +150,8 @@ export default defineComponent({
       handleUploading,
       handleFileUploaded,
       handleUploadedError,
-      handleBeforeUpload
+      handleBeforeUpload,
+      postId
     };
   }
 });
