@@ -2,6 +2,7 @@
   <h3 v-if="!postId">新建文章</h3>
   <upload
     :action="'/upload'"
+    :status="isSuccess"
     :beforeUpload="handleBeforeUpload"
     @uploading="handleUploading"
     @fileUploaded="handleFileUploaded"
@@ -18,6 +19,13 @@
         </div>
         <h2>正在上传</h2>
       </div>
+    </template>
+    <template #success="dataProps">
+      <!-- 如果 uploadImgURL 不存在则使用 currentPostURL -->
+      <img
+        :src="dataProps.uploadImgURL || currentPostImgURL"
+        class="file-upload-image"
+      />
     </template>
   </upload>
   <validate-form @form-submit="onPostSubmit">
@@ -64,6 +72,7 @@ export default defineComponent({
   setup() {
     const title = ref("");
     const content = ref("");
+    const currentPostImgURL = ref("");
     const imageId = ref<string | undefined>("");
     const textarea = "textarea";
     const store = useStore();
@@ -72,21 +81,34 @@ export default defineComponent({
     const postId = route.query.postId;
     const post = computed(() => store.state.posts.data[postId as string]);
     const { column, _id } = store.state.user;
+    const isSuccess = ref(true);
 
     // 根据 postId 判断是否为修改状态
     // 如果该 Id 对应的文章在 store 中存在，则直接从 store 中读取数据，并填充到输入框中
     if (postId) {
       if (post.value) {
-        const { title: currTitle, content: currContent } = post.value;
+        const { title: currTitle, content: currContent, image } = post.value;
         title.value = currTitle;
         content.value = currContent;
+        if (image.url) {
+          currentPostImgURL.value = image.url;
+        } else {
+          isSuccess.value = false;
+        }
       } else {
         store.dispatch("fetchPost", { postId }).then(() => {
-          const { title: currTitle, content: currContent } = post.value;
+          const { title: currTitle, content: currContent, image } = post.value;
           title.value = currTitle;
           content.value = currContent;
+          if (image.url) {
+            currentPostImgURL.value = image.url;
+          } else {
+            isSuccess.value = false;
+          }
         });
       }
+    } else {
+      isSuccess.value = false;
     }
     const onPostSubmit = (result: boolean) => {
       if (result) {
@@ -151,7 +173,9 @@ export default defineComponent({
       handleFileUploaded,
       handleUploadedError,
       handleBeforeUpload,
-      postId
+      postId,
+      isSuccess,
+      currentPostImgURL
     };
   }
 });

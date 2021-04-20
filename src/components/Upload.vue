@@ -12,7 +12,11 @@
     <slot v-else-if="uploadingStatus === 'uploading'" name="uploading">
       <button class="btn btn-primary is-disabled">正在上传</button>
     </slot>
-    <slot v-else-if="uploadingStatus === 'success'" name="success">
+    <slot
+      v-else-if="uploadingStatus === 'success'"
+      name="success"
+      :uploadImgURL="uploadImgURL"
+    >
       <img :src="uploadImgURL" class="file-upload-image" />
     </slot>
     <slot v-else-if="uploadingStatus === 'error'" name="error">
@@ -37,7 +41,11 @@ export default defineComponent({
       type: String,
       required: true
     },
-    beforeUpload: Function
+    beforeUpload: Function,
+    status: {
+      type: Boolean,
+      required: true
+    }
   },
   emits: ["uploading", "fileUploaded", "uploadedError"],
   setup(props, context) {
@@ -52,6 +60,9 @@ export default defineComponent({
         inputRef.value.click();
       }
     };
+
+    // NOTE：点击修改按钮时，status 为 true，显示当前文章上传的图片
+    uploadingStatus.value = props.status ? "success" : "ready";
 
     const handleFileChange = (e: Event) => {
       const currentTarget = e.target as HTMLInputElement;
