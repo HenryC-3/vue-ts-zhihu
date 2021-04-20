@@ -90,6 +90,7 @@ export const store = createStore<GlobalStore>({
         .post(`/user/login`, payload)
         .then(res => {
           localStorage.setItem("token", res.data.data.token);
+          axios.defaults.headers.common.Authorization = `Bearer ${res.data.data.token}`;
           context.commit("login", res.data);
           return res.data.data;
         })
