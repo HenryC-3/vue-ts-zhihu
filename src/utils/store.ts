@@ -35,6 +35,10 @@ export const store = createStore<GlobalStore>({
     fetchPost(state, rawData) {
       state.posts.data[rawData.data._id] = rawData.data;
     },
+
+    deletePost(state, rawData) {
+      delete state.posts.data[rawData.data._id];
+    },
     fetchCurrentUser(state, rowData) {
       state.user = { isLogin: true, ...rowData.data };
     },
@@ -77,6 +81,13 @@ export const store = createStore<GlobalStore>({
     fetchPost(context, payload) {
       return axios.get(`/posts/${payload.postId}`).then(res => {
         context.commit("fetchPost", res.data);
+      });
+    },
+    // 删除一篇文章
+    deletePost(context, payload) {
+      return axios.delete(`/posts/${payload.postId}`).then(res => {
+        context.commit("deletePost", res.data);
+        return res.data;
       });
     },
     // 获取登录用户信息

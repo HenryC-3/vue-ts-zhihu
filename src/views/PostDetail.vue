@@ -1,4 +1,10 @@
 <template>
+  <modal
+    :isShow="isShow"
+    @modalClose="handleModalClose"
+    @modalConfirm="handleConfirmDelete"
+    >确定删除文章吗？</modal
+  >
   <div>
     <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
       <!-- 头图 -->
@@ -38,18 +44,21 @@
 <script lang="ts">
 import { PostProps, AvatarProps } from "../types/types";
 import { useRoute, useRouter } from "vue-router";
-import { computed, onMounted } from "@vue/runtime-core";
+import { computed, onMounted, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import UserProfile from "../components/UserProfile.vue";
 import markdownIt from "markdown-it";
+import Modal from "@/components/Modal.vue";
+import createMessage from "@/components/createMessage";
 export default {
   name: "PostDetail",
-  components: { UserProfile },
+  components: { UserProfile, Modal },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
     const md = new markdownIt();
+    const isShow = ref(false);
     onMounted(() => {
       store.dispatch("fetchPost", { postId: route.params.id });
     });
@@ -87,16 +96,29 @@ export default {
     };
 
     const handleDelete = () => {
-      //
+      isShow.value = true;
     };
 
+    const handleModalClose = () => {
+      isShow.value = false;
+    };
+
+    const handleConfirmDelete = () => {
+      store.dispatch("deletePost", { postId: route.params.id }).then(res => {
+        createMessage("删除成功，即将跳转到专栏首页", "success");
+        router.push({ path: `/column/${res.data.column}` });
+      });
+    };
     return {
       currentPost,
       currentImageUrl,
       currentHTML,
       showEdit,
       handleModify,
-      handleDelete
+      handleDelete,
+      handleModalClose,
+      isShow,
+      handleConfirmDelete
     };
   }
 };
