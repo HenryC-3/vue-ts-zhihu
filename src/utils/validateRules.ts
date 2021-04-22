@@ -16,3 +16,7 @@ export const postTitleRule: RulesProp = [
 export const postContentRule: RulesProp = [
   { type: "required", message: "文章内容不能为空" }
 ];
+
+export const nameRule: RulesProp = [
+  { type: "required", message: "昵称不能为空" }
+];
