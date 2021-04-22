@@ -12,8 +12,9 @@ export interface AvatarProps {
   fitUrl?: string;
 }
 export interface RuleProp {
-  type: "required" | "email";
+  type: "required" | "email" | "custom";
   message: string;
+  validator?: () => boolean;
 }
 
 export type RulesProp = RuleProp[];
