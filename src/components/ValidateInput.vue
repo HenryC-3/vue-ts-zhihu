@@ -4,16 +4,16 @@
     class="form-control"
     @blur="validateInput"
     v-model="inputRef.val"
-    :class="{ 'is-invalid': inputRef.error }"
+    :class="{ 'is-invalid': inputRef.isInvalid }"
     v-bind="$attrs"
   />
-  <div class="form-text" v-if="inputRef.error">{{ inputRef.message }}</div>
+  <div class="form-text" v-if="inputRef.isInvalid">{{ inputRef.message }}</div>
   <textarea
     v-if="tag === 'textarea'"
     class="form-control"
     @blur="validateInput"
     v-model="inputRef.val"
-    :class="{ 'is-invalid': inputRef.error }"
+    :class="{ 'is-invalid': inputRef.isInvalid }"
     v-bind="$attrs"
   />
 </template>
@@ -44,7 +44,7 @@ export default defineComponent({
           context.emit("update:modelValue", val);
         }
       }),
-      error: false,
+      isInvalid: false, // 决定是否显示警告框
       message: ""
     });
     const validateInput = () => {
@@ -64,7 +64,7 @@ export default defineComponent({
           }
           return passed;
         });
-        inputRef.error = !allPassed;
+        inputRef.isInvalid = !allPassed;
         return allPassed;
       }
       return true;
