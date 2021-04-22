@@ -29,7 +29,12 @@
             ><a href="#" class="dropdown-item">编辑资料</a></dropdown-item
           >
           <dropdown-item
-            ><a href="#" class="dropdown-item">退出登陆</a></dropdown-item
+            ><a
+              href="/login"
+              class="dropdown-item dropdown-logout"
+              @click="handleLogout"
+              >退出登陆</a
+            ></dropdown-item
           >
         </dropdown>
       </li>
@@ -51,6 +56,20 @@ export default defineComponent({
       type: Object as PropType<UserProps>,
       required: true
     }
+  },
+  setup() {
+    const handleLogout = () => {
+      localStorage.setItem("token", "");
+    };
+    return {
+      handleLogout
+    };
   }
 });
 </script>
+
+<style scoped>
+.dropdown-logout {
+  cursor: pointer;
+}
+</style>
