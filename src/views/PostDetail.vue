@@ -8,14 +8,16 @@
   <div>
     <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
       <!-- 头图 -->
-      <img
-        :src="currentImageUrl"
-        alt="currentPost.title"
-        class="rounded-lg img-fluid my-4"
-        v-if="currentImageUrl"
-      />
+      <div class="post-image-container">
+        <img
+          :src="currentImageUrl"
+          alt="currentPost.title"
+          class="post-image"
+          v-if="currentImageUrl"
+        />
+      </div>
       <!-- 标题 -->
-      <h2 class="mb-4">{{ currentPost.title }}</h2>
+      <h2 class="mt-4 mb-4">{{ currentPost.title }}</h2>
       <div
         class="user-profile-component border-top border-bottom py-3 mb-5 align-items-center row g-0"
       >
@@ -26,7 +28,7 @@
             v-if="typeof currentPost.author === 'object'"
           ></user-profile>
         </div>
-        <span class="text-muted col text-right font-italic"
+        <span class="text-muted col text-end font-italic"
           >发表于：{{ currentPost.createdAt }}</span
         >
       </div>
@@ -123,3 +125,15 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.post-image-container {
+  height: 200px;
+  cursor: pointer;
+}
+.post-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+</style>
