@@ -24,7 +24,7 @@ export interface UserProps {
   isLogin: boolean;
   nickName?: string;
   _id?: string;
-  columnId?: string;
+  column?: string;
   description?: string;
   avatar?: AvatarProps;
 }
