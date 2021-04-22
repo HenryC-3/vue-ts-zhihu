@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-dark bg-primary justify-content-between mb-4 px-4">
-    <a class="navbar-brand" href="#">者也专栏</a>
+    <router-link class="navbar-brand" :to="'/'">者也专栏</router-link>
     <!-- 未登陆显示 -->
     <ul v-if="!user.isLogin" class="list-inline mb-0">
       <li class="list-inline-item">
@@ -17,6 +17,11 @@
           <dropdown-item
             ><router-link :to="`/create`" class="dropdown-item"
               >新建文章</router-link
+            ></dropdown-item
+          >
+          <dropdown-item
+            ><router-link :to="`/column/${user.column}`" class="dropdown-item"
+              >我的专栏</router-link
             ></dropdown-item
           >
           <!-- 禁止点击 -->
