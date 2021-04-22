@@ -7,7 +7,7 @@ export const store = createStore<GlobalStore>({
   state: {
     error: { status: false },
     token: localStorage.getItem("token") || "",
-    columns: [],
+    columns: {},
     posts: { data: {} },
     user: { isLogin: false },
     loading: false
@@ -20,10 +20,10 @@ export const store = createStore<GlobalStore>({
       state.posts.data[post._id] = post;
     },
     fetchColumns(state, rowData) {
-      state.columns = rowData.data.list;
+      state.columns = arrToObj(rowData.data.list);
     },
     fetchColumn(state, rowData) {
-      state.columns = [rowData.data];
+      state.columns[rowData.data._id] = rowData.data;
     },
     fetchPosts(state, rowData) {
       state.posts.data = {
@@ -118,7 +118,7 @@ export const store = createStore<GlobalStore>({
   },
   getters: {
     getColumnById: state => (id: string) => {
-      return state.columns.find(c => c._id === id) || [];
+      return state.columns[id];
     },
     getCurrentPost: state => (id: string) => {
       return state.posts.data[id];

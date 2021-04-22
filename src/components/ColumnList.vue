@@ -27,7 +27,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import { ColumnProps } from "../types/types";
+import { ListProps, ColumnProps } from "../types/types";
 import { addColumnAvatar } from "../utils/helper";
 
 export default defineComponent({
@@ -41,13 +41,13 @@ export default defineComponent({
       // <template> 中显示属性提示需要在 vetur 插件中进行设置 vetur.experimental.templateInterpolationService: true, https://vuejs.github.io/vetur/guide/interpolation.html#generic-language-features
 
       // VIEW:为什么不能直接使用类型断言，而需要 PropType？ [TypeScript 支持 — Vue.js](https://cn.vuejs.org/v2/guide/typescript.html#%E6%A0%87%E6%B3%A8-Prop)
-      type: Array as PropType<ColumnProps[]>,
+      type: Object as PropType<ListProps<ColumnProps>>,
       required: true
     }
   },
   setup(props) {
     const columnList = computed(() => {
-      return props.list.map(column => {
+      return Object.values(props.list).map(column => {
         addColumnAvatar(column, 50, 50);
         return column;
       });

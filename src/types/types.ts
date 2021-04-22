@@ -49,7 +49,7 @@ export interface ErrorProps {
 export interface GlobalStore {
   error: ErrorProps;
   token: string;
-  columns: ColumnProps[];
+  columns: ListProps<ColumnProps>;
   posts: {
     data: ListProps<PostProps>;
   };
