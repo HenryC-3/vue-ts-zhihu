@@ -20,7 +20,7 @@ export const store = createStore<GlobalStore>({
       state.posts.data[post._id] = post;
     },
     fetchColumns(state, rowData) {
-      state.columns = arrToObj(rowData.data.list);
+      state.columns = { ...state.columns, ...arrToObj(rowData.data.list) };
     },
     fetchColumn(state, rowData) {
       state.columns[rowData.data._id] = rowData.data;
@@ -51,9 +51,13 @@ export const store = createStore<GlobalStore>({
   },
   actions: {
     // 获取抓专栏列表
-    fetchColumns(context) {
-      axios.get("/columns").then(res => {
+    fetchColumns(context, payload) {
+      const urlParams = payload
+        ? `?currentPage=${payload.page}&pageSize=${payload.size}`
+        : "";
+      return axios.get("/columns" + urlParams).then(res => {
         context.commit("fetchColumns", res.data);
+        return res.data;
       });
     },
     // 获取专栏详情
