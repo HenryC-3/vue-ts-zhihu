@@ -84,9 +84,9 @@ export default defineComponent({
     const isSuccess = ref(true);
 
     // 根据 postId 判断是否为修改状态
-    // 如果该 Id 对应的文章在 store 中存在，则直接从 store 中读取数据，并填充到输入框中
+    // 在 action 中进行判断：如果该 Id 对应的文章存在，则直接从 store 中读取数据，并填充到输入框中
     if (postId) {
-      if (post.value) {
+      store.dispatch("fetchPost", { postId }).then(() => {
         const { title: currTitle, content: currContent, image } = post.value;
         title.value = currTitle;
         content.value = currContent;
@@ -95,18 +95,7 @@ export default defineComponent({
         } else {
           isSuccess.value = false;
         }
-      } else {
-        store.dispatch("fetchPost", { postId }).then(() => {
-          const { title: currTitle, content: currContent, image } = post.value;
-          title.value = currTitle;
-          content.value = currContent;
-          if (image.url) {
-            currentPostImgURL.value = image.url;
-          } else {
-            isSuccess.value = false;
-          }
-        });
-      }
+      });
     } else {
       isSuccess.value = false;
     }

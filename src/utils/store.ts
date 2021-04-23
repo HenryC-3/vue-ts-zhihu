@@ -8,7 +8,7 @@ export const store = createStore<GlobalStore>({
     error: { status: false },
     token: localStorage.getItem("token") || "",
     columns: {},
-    posts: { data: {} },
+    posts: { data: {}, loadedColumns: [] },
     user: { isLogin: false },
     loading: false
   },
@@ -25,14 +25,17 @@ export const store = createStore<GlobalStore>({
     fetchColumn(state, rowData) {
       state.columns[rowData.data._id] = rowData.data;
     },
-    fetchPosts(state, rowData) {
+    fetchPosts(state, { data: rowData, columnId }) {
+      // 使用 loadedcolumns 储存 columnId，标记已请求过文章列表的 column
+      state.posts.loadedColumns.push(columnId);
       state.posts.data = {
         ...state.posts.data,
         ...arrToObj(rowData.data.list)
       };
     },
-
     fetchPost(state, rawData) {
+      // 在 action fetchPosts 中，后端会返回文章除 “文章内容” 外的所有信息，包括 id
+      // 所以不能通过储存 postId 来标记已经请求过的文章
       state.posts.data[rawData.data._id] = rawData.data;
     },
 
@@ -54,10 +57,12 @@ export const store = createStore<GlobalStore>({
       });
     },
     // 获取专栏详情
-    fetchColumn(context, payload) {
-      axios.get(`/columns/${payload.columnId}`).then(res => {
-        context.commit("fetchColumn", res.data);
-      });
+    fetchColumn({ commit, state }, { columnId }) {
+      if (!state.columns[columnId]) {
+        axios.get(`/columns/${columnId}`).then(res => {
+          commit("fetchColumn", res.data);
+        });
+      }
     },
     // 创建一篇文章
     createPost(context, payload) {
@@ -72,16 +77,20 @@ export const store = createStore<GlobalStore>({
       });
     },
     // 获取对应专栏文章
-    fetchPosts(context, payload) {
-      axios.get(`/columns/${payload.columnId}/posts`).then(res => {
-        context.commit("fetchPosts", res.data);
-      });
+    fetchPosts({ state, commit }, { columnId }) {
+      if (!state.posts.loadedColumns.includes(columnId)) {
+        axios.get(`/columns/${columnId}/posts`).then(res => {
+          commit("fetchPosts", { data: res.data, columnId });
+        });
+      }
     },
     // 获取一篇文章
-    fetchPost(context, payload) {
-      return axios.get(`/posts/${payload.postId}`).then(res => {
-        context.commit("fetchPost", res.data);
-      });
+    fetchPost({ state, commit }, { postId }) {
+      const currentPost = state.posts.data[postId];
+      if (!currentPost || !currentPost.content)
+        return axios.get(`/posts/${postId}`).then(res => {
+          commit("fetchPost", res.data);
+        });
     },
     // 删除一篇文章
     deletePost(context, payload) {
