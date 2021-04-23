@@ -45,7 +45,9 @@ export default defineComponent({
     });
     const column = computed(() => {
       const selectedColumn = store.getters.getColumnById(route.params.id);
-      addColumnAvatar(selectedColumn, 50, 50);
+      if (selectedColumn) {
+        addColumnAvatar(selectedColumn, 50, 50);
+      }
       return selectedColumn;
     });
 
