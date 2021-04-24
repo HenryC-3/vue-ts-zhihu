@@ -67,6 +67,12 @@ export interface ListProps<T> {
   [key: string]: T;
 }
 
+export interface Params {
+  [propName: string]: any;
+  page: number;
+  size: number;
+}
+
 export type ImageCheckErrorType = "format" | "size" | null;
 export type TagType = "input" | "textarea";
 export type MessageType = "success" | "error" | "default";
