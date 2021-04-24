@@ -8,7 +8,7 @@ export const store = createStore<GlobalStore>({
     error: { status: false },
     token: localStorage.getItem("token") || "",
     columns: {},
-    posts: { data: {}, loadedColumns: [] },
+    posts: { data: {}, loadedColumns: [], homePageInitialLoaded: false },
     user: { isLogin: false },
     loading: false
   },
@@ -20,6 +20,7 @@ export const store = createStore<GlobalStore>({
       state.posts.data[post._id] = post;
     },
     fetchColumns(state, rowData) {
+      state.posts.homePageInitialLoaded = true;
       state.columns = { ...state.columns, ...arrToObj(rowData.data.list) };
     },
     fetchColumn(state, rowData) {
@@ -55,10 +56,12 @@ export const store = createStore<GlobalStore>({
       const urlParams = payload
         ? `?currentPage=${payload.page}&pageSize=${payload.size}`
         : "";
-      return axios.get("/columns" + urlParams).then(res => {
-        context.commit("fetchColumns", res.data);
-        return res.data;
-      });
+      if (urlParams || !context.state.posts.homePageInitialLoaded) {
+        return axios.get("/columns" + urlParams).then(res => {
+          context.commit("fetchColumns", res.data);
+          return res.data;
+        });
+      }
     },
     // 获取专栏详情
     fetchColumn({ commit, state }, { columnId }) {
@@ -81,12 +84,13 @@ export const store = createStore<GlobalStore>({
       });
     },
     // 获取对应专栏文章
-    fetchPosts({ state, commit }, { columnId }) {
-      if (!state.posts.loadedColumns.includes(columnId)) {
-        axios.get(`/columns/${columnId}/posts`).then(res => {
-          commit("fetchPosts", { data: res.data, columnId });
-        });
-      }
+    fetchPosts({ state, commit }, { columnId, page, size }) {
+      const urlParams =
+        page || size ? `?currentPage=${page}&pageSize=${size}` : "";
+      return axios.get(`/columns/${columnId}/posts` + urlParams).then(res => {
+        commit("fetchPosts", { data: res.data, columnId });
+        return res.data;
+      });
     },
     // 获取一篇文章
     fetchPost({ state, commit }, { postId }) {

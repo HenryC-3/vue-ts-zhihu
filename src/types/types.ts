@@ -53,6 +53,7 @@ export interface GlobalStore {
   posts: {
     data: ListProps<PostProps>;
     loadedColumns: string[];
+    homePageInitialLoaded: boolean;
   };
   user: UserProps;
   loading: boolean;
