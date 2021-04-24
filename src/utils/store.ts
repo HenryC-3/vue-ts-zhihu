@@ -8,7 +8,7 @@ export const store = createStore<GlobalStore>({
     error: { status: false },
     token: localStorage.getItem("token") || "",
     columns: {},
-    posts: { data: {}, loadedColumns: [], homePageInitialLoaded: false },
+    posts: { data: {}, loadedColumns: {}, homePageInitialLoaded: false },
     user: { isLogin: false },
     loading: false
   },
@@ -28,7 +28,7 @@ export const store = createStore<GlobalStore>({
     },
     fetchPosts(state, { data: rowData, columnId }) {
       // 使用 loadedcolumns 储存 columnId，标记已请求过文章列表的 column
-      state.posts.loadedColumns.push(columnId);
+      state.posts.loadedColumns[columnId] = true;
       state.posts.data = {
         ...state.posts.data,
         ...arrToObj(rowData.data.list)
@@ -87,10 +87,11 @@ export const store = createStore<GlobalStore>({
     fetchPosts({ state, commit }, { columnId, page, size }) {
       const urlParams =
         page || size ? `?currentPage=${page}&pageSize=${size}` : "";
-      return axios.get(`/columns/${columnId}/posts` + urlParams).then(res => {
-        commit("fetchPosts", { data: res.data, columnId });
-        return res.data;
-      });
+      if (page !== 1 || !state.posts.loadedColumns[columnId])
+        return axios.get(`/columns/${columnId}/posts` + urlParams).then(res => {
+          commit("fetchPosts", { data: res.data, columnId });
+          return res.data;
+        });
     },
     // 获取一篇文章
     fetchPost({ state, commit }, { postId }) {

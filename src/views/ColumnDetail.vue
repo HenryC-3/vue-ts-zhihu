@@ -17,15 +17,23 @@
         <p class="text-muted">{{ column.description }}</p>
       </div>
     </div>
+    <!-- 文章列表 -->
     <post-list :posts="posts"></post-list>
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-primary" @click="loadMorePage" v-if="!isLastPage">
+        加载更多
+      </button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import PostList from "@/components/PostList.vue";
+import useLoadMore from "@/hooks/useLoadMore";
 import { PostProps } from "@/types/types";
 import { addColumnAvatar } from "@/utils/helper";
-import { computed, defineComponent, onMounted } from "vue";
+import createMessage from "../components/createMessage";
+import { computed, defineComponent, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
@@ -35,9 +43,14 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const store = useStore();
+    const currentCount = computed(
+      () => Object.keys(store.state.posts.data).length
+    );
     onMounted(() => {
       store.dispatch("fetchPosts", {
-        columnId: route.params.id
+        columnId: route.params.id,
+        page: 1,
+        size: 2 // NOTE: 为展示加载更多功能，特地请求少量文章
       });
       store.dispatch("fetchColumn", {
         columnId: route.params.id
@@ -57,9 +70,26 @@ export default defineComponent({
         return post.column === route.params.id;
       });
     });
+
+    const { isLastPage, loadMorePage } = useLoadMore(
+      "fetchPosts",
+      {
+        columnId: route.params.id,
+        page: 2,
+        size: 2
+      },
+      currentCount
+    );
+
+    watch(isLastPage, () => {
+      createMessage("全部加载完毕", "success");
+    });
+
     return {
       posts: currentColumnPosts,
-      column
+      column,
+      isLastPage,
+      loadMorePage
     };
   }
 });
