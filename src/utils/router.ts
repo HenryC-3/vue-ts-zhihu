@@ -4,6 +4,7 @@ import Login from "../views/Login.vue";
 import ColumnDetail from "../views/ColumnDetail.vue";
 import CreatePost from "../views/CreatePost.vue";
 import PostDetail from "../views/PostDetail.vue";
+import SignUp from "../views/SignUp.vue";
 import { store } from "../utils/store";
 import axios from "axios";
 import createMessage from "@/components/createMessage";
@@ -21,6 +22,12 @@ export const router = createRouter({
       path: "/login",
       name: "login",
       component: Login,
+      meta: { redirectAlreadyLogin: true }
+    },
+    {
+      path: "/signUp",
+      name: "signUp",
+      component: SignUp,
       meta: { redirectAlreadyLogin: true }
     },
     {
