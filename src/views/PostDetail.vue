@@ -89,7 +89,7 @@ export default {
       // 未登录情况下，user.column 一定为空
       return (
         store.state.user.column ===
-        store.state.posts.data[route.params.id as string].column
+        store.state.posts[route.params.id as string].column
       );
     });
 

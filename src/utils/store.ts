@@ -17,7 +17,7 @@ export const store = createStore<GlobalStore>({
     error: { status: false },
     token: localStorage.getItem("token") || "",
     columns: {},
-    posts: { data: {} },
+    posts: {},
     user: { isLogin: false },
     loading: false,
     loadedUrl: {}
@@ -28,7 +28,7 @@ export const store = createStore<GlobalStore>({
     },
 
     createPost(state, post: PostProps) {
-      state.posts.data[post._id] = post;
+      state.posts[post._id] = post;
     },
     fetchColumns(state, rawData) {
       state.columns = { ...state.columns, ...arrToObj(rawData.data.list) };
@@ -37,17 +37,17 @@ export const store = createStore<GlobalStore>({
       state.columns[rawData.data._id] = rawData.data;
     },
     fetchPosts(state, rawData) {
-      state.posts.data = {
-        ...state.posts.data,
+      state.posts = {
+        ...state.posts,
         ...arrToObj(rawData.data.list)
       };
     },
     fetchPost(state, rawData) {
-      state.posts.data[rawData.data._id] = rawData.data;
+      state.posts[rawData.data._id] = rawData.data;
     },
 
     deletePost(state, rawData) {
-      delete state.posts.data[rawData.data._id];
+      delete state.posts[rawData.data._id];
     },
     fetchCurrentUser(state, rawData) {
       state.user = { isLogin: true, ...rawData.data };
@@ -139,7 +139,7 @@ export const store = createStore<GlobalStore>({
       return state.columns[id];
     },
     getCurrentPost: state => (id: string) => {
-      return state.posts.data[id];
+      return state.posts[id];
     }
   }
 });

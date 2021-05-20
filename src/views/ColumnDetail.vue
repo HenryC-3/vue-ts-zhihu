@@ -43,9 +43,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const store = useStore();
-    const currentCount = computed(
-      () => Object.keys(store.state.posts.data).length
-    );
+    const currentCount = computed(() => Object.keys(store.state.posts).length);
     onMounted(() => {
       store.dispatch("fetchPosts", {
         columnId: route.params.id,
@@ -65,7 +63,7 @@ export default defineComponent({
     });
 
     const currentColumnPosts = computed(() => {
-      const posts = Object.values(store.state.posts.data) as PostProps[];
+      const posts = Object.values(store.state.posts) as PostProps[];
       return posts.filter(post => {
         return post.column === route.params.id;
       });

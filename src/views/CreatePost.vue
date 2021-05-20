@@ -79,7 +79,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const postId = route.query.postId;
-    const post = computed(() => store.state.posts.data[postId as string]);
+    const post = computed(() => store.state.posts[postId as string]);
     const { column, _id } = store.state.user;
     const isSuccess = ref(true);
 

@@ -50,9 +50,7 @@ export interface GlobalStore {
   error: ErrorProps;
   token: string;
   columns: ListProps<ColumnProps>;
-  posts: {
-    data: ListProps<PostProps>;
-  };
+  posts: ListProps<PostProps>;
   user: UserProps;
   loading: boolean;
   loadedUrl: { [key: string]: { expries: number } };
