@@ -1,117 +1,118 @@
 import { GlobalStore, PostProps } from "@/types/types";
 import { createStore } from "vuex";
-import axios from "axios";
 import { arrToObj } from "../utils/helper";
+import { fethchColumn, fethchColumns } from "@/api/column";
+import {
+  createPost,
+  deletePost,
+  fetchPost,
+  fetchPosts,
+  modifyPost
+} from "@/api/post";
+import { fetchCurrentUser, userLogin } from "@/api/user";
+import instance from "./instance";
 
 export const store = createStore<GlobalStore>({
   state: {
     error: { status: false },
     token: localStorage.getItem("token") || "",
     columns: {},
-    posts: { data: {}, loadedColumns: {}, homePageInitialLoaded: false },
+    posts: { data: {} },
     user: { isLogin: false },
-    loading: false
+    loading: false,
+    loadedUrl: {}
   },
   mutations: {
     login(state, rawData) {
       state.token = rawData.token;
     },
+
     createPost(state, post: PostProps) {
       state.posts.data[post._id] = post;
     },
-    fetchColumns(state, rowData) {
-      state.posts.homePageInitialLoaded = true;
-      state.columns = { ...state.columns, ...arrToObj(rowData.data.list) };
+    fetchColumns(state, rawData) {
+      state.columns = { ...state.columns, ...arrToObj(rawData.data.list) };
     },
-    fetchColumn(state, rowData) {
-      state.columns[rowData.data._id] = rowData.data;
+    fetchColumn(state, rawData) {
+      state.columns[rawData.data._id] = rawData.data;
     },
-    fetchPosts(state, { data: rowData, columnId }) {
-      // 使用 loadedcolumns 储存 columnId，标记已请求过文章列表的 column
-      state.posts.loadedColumns[columnId] = true;
+    fetchPosts(state, rawData) {
       state.posts.data = {
         ...state.posts.data,
-        ...arrToObj(rowData.data.list)
+        ...arrToObj(rawData.data.list)
       };
     },
     fetchPost(state, rawData) {
-      // 在 action fetchPosts 中，后端会返回文章除 “文章内容” 外的所有信息，包括 id
-      // 所以不能通过储存 postId 来标记已经请求过的文章
       state.posts.data[rawData.data._id] = rawData.data;
     },
 
     deletePost(state, rawData) {
       delete state.posts.data[rawData.data._id];
     },
-    fetchCurrentUser(state, rowData) {
-      state.user = { isLogin: true, ...rowData.data };
+    fetchCurrentUser(state, rawData) {
+      state.user = { isLogin: true, ...rawData.data };
     },
-    setError(state, rowData) {
-      state.error = rowData;
+    setError(state, rawData) {
+      state.error = rawData;
     }
   },
   actions: {
     // 获取抓专栏列表
-    fetchColumns(context, payload) {
-      const urlParams = payload
-        ? `?currentPage=${payload.page}&pageSize=${payload.size}`
-        : "";
-      if (urlParams || !context.state.posts.homePageInitialLoaded) {
-        return axios.get("/columns" + urlParams).then(res => {
-          context.commit("fetchColumns", res.data);
-          return res.data;
-        });
+    fetchColumns({ commit }, payload) {
+      let page;
+      let size;
+      if (payload) {
+        page = payload.page;
+        size = payload.size;
       }
+      return fethchColumns(page, size).then(res => {
+        commit("fetchColumns", res.data);
+        return res.data;
+      });
     },
     // 获取专栏详情
     fetchColumn({ commit, state }, { columnId }) {
       if (!state.columns[columnId]) {
-        axios.get(`/columns/${columnId}`).then(res => {
+        fethchColumn(columnId).then(res => {
           commit("fetchColumn", res.data);
         });
       }
     },
     // 创建一篇文章
-    createPost(context, payload) {
-      return axios.post("posts", payload.post).then(res => {
+    createPost(context, { post }) {
+      return createPost(post).then(res => {
         context.commit("createPost", res.data);
       });
     },
     // 修改一篇文章
-    modifyPost(context, payload) {
-      axios.patch(`posts/${payload.post.postId}`, payload.post).then(res => {
-        context.commit("createPost", res.data);
+    modifyPost(context, { post }) {
+      return modifyPost(post.postId, post).then(res => {
+        context.commit("createPost", res.data.data);
       });
     },
     // 获取对应专栏文章
-    fetchPosts({ state, commit }, { columnId, page, size }) {
-      const urlParams =
-        page || size ? `?currentPage=${page}&pageSize=${size}` : "";
-      if (page !== 1 || !state.posts.loadedColumns[columnId])
-        return axios.get(`/columns/${columnId}/posts` + urlParams).then(res => {
-          commit("fetchPosts", { data: res.data, columnId });
-          return res.data;
-        });
+    fetchPosts({ commit }, { columnId, page, size }) {
+      return fetchPosts(columnId, page, size).then(res => {
+        commit("fetchPosts", res.data);
+        return res.data;
+      });
     },
     // 获取一篇文章
-    fetchPost({ state, commit }, { postId }) {
-      const currentPost = state.posts.data[postId];
-      if (!currentPost || !currentPost.content)
-        return axios.get(`/posts/${postId}`).then(res => {
-          commit("fetchPost", res.data);
-        });
+    fetchPost({ commit }, { postId }) {
+      return fetchPost(postId).then(res => {
+        commit("fetchPost", res.data);
+      });
     },
     // 删除一篇文章
-    deletePost(context, payload) {
-      return axios.delete(`/posts/${payload.postId}`).then(res => {
+    deletePost(context, { postId }) {
+      return deletePost(postId).then(res => {
         context.commit("deletePost", res.data);
         return res.data;
       });
     },
     // 获取登录用户信息
     fetchCurrentUser(context) {
-      return axios
-        .get("/user/current")
+      return fetchCurrentUser()
         .then(res => {
           context.commit("fetchCurrentUser", res.data);
         })
@@ -120,12 +121,11 @@ export const store = createStore<GlobalStore>({
         });
     },
     // 获取 token
-    login(context, payload) {
-      return axios
-        .post(`/user/login`, payload)
+    login(context, { email, password }) {
+      return userLogin(email, password)
         .then(res => {
           localStorage.setItem("token", res.data.data.token);
-          axios.defaults.headers.common.Authorization = `Bearer ${res.data.data.token}`;
+          instance.defaults.headers.common.Authorization = `Bearer ${res.data.data.token}`;
           context.commit("login", res.data);
           return res.data.data;
         })

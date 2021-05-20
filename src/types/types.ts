@@ -52,11 +52,10 @@ export interface GlobalStore {
   columns: ListProps<ColumnProps>;
   posts: {
     data: ListProps<PostProps>;
-    loadedColumns: ListProps<boolean>;
-    homePageInitialLoaded: boolean;
   };
   user: UserProps;
   loading: boolean;
+  loadedUrl: { [key: string]: { expries: number } };
 }
 
 export interface ImageCheckCondition {
@@ -72,6 +71,13 @@ export interface Params {
   [propName: string]: any;
   page: number;
   size: number;
+}
+
+export interface Option {
+  loading?: boolean;
+  error?: boolean;
+  cache?: boolean;
+  expires?: number;
 }
 
 export type ImageCheckErrorType = "format" | "size" | null;

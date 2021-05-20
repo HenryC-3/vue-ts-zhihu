@@ -6,8 +6,8 @@ import CreatePost from "../views/CreatePost.vue";
 import PostDetail from "../views/PostDetail.vue";
 import SignUp from "../views/SignUp.vue";
 import { store } from "../utils/store";
-import axios from "axios";
 import createMessage from "@/components/createMessage";
+import instance from "./instance";
 
 const routerHistory = createWebHistory();
 export const router = createRouter({
@@ -49,26 +49,24 @@ export const router = createRouter({
   ]
 });
 
-// NOTE：使用路由 meta 的意义是？
-// - 很多时候跳转路由的逻辑是：如果满足了条件 A，那么就跳转路由。逻辑上，该条件与该路由是绑定在一起，因此可以放在 meta 信息中，方便管理
-// - 借助 vue-router 钩子，可以读取当前路由的 meta 信息，编写跳转逻辑
-// IMPR: 逻辑不够清晰，有待改善
 router.beforeEach((to, from, next) => {
   const { user, token } = store.state;
   const { redirectAlreadyLogin, requiredLogin } = to.meta;
 
+  // 用户已经登录，跳转至首页
   if (user.isLogin) {
     redirectAlreadyLogin ? next("/") : next();
   } else {
+    // 用户未登录，但存在 token，获取用户登录信息
     if (token) {
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      instance.defaults.headers.common.Authorization = `Bearer ${token}`;
       store
-        .dispatch("fetchCurrentUser")
+        .dispatch("fetchCurrentUser") // 利用 token 登录成功，将登录状态设置为已登录
         .then(() => {
           redirectAlreadyLogin ? next("/") : next();
         })
-        .catch(e => {
-          localStorage.setItem("token", "");
+        .catch(e => { // token 过期，登录失败，跳转至登录页
+          localStorage.removeItem("token");
           createMessage("登录过期，请重新登录", "error");
           next("login");
         });

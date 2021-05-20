@@ -6,7 +6,6 @@
     </div>
     <!-- 点击提交时触发 form-submit 事件 -->
     <div @click.prevent="submitForm">
-      <!-- IMPR:点击触发区域为默认宽度 100% 限定点击触发区域为 slot 渲染区域大小-->
       <slot name="submit">
         <!-- NOTE：在 slot 内容渲染默认内容 -->
         <button type="submit" class="btn btn-primary">登录</button>

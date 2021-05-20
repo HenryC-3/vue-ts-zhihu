@@ -33,6 +33,7 @@ import { defineComponent, ref } from "vue";
 // eslint-disable-next-line
 import { uploadingStatus } from "../types/types";
 import axios from "axios";
+import { fileUpload } from "@/api/file";
 
 export default defineComponent({
   name: "Upload",
@@ -80,12 +81,7 @@ export default defineComponent({
       }
       uploadingStatus.value = "uploading";
       context.emit("uploading");
-      axios
-        .post(props.action, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        })
+      fileUpload(formData)
         .then(res => {
           uploadingStatus.value = "success";
           uploadImgURL.value = res.data.data.url;
