@@ -42,7 +42,7 @@ const request: CustomRequest = function(url, method, payload, option) {
 
   // 显示 loading 组件
   if (loading) store.state.loading = true;
-  return new Promise<AxiosResponse>(resolve => {
+  return new Promise<AxiosResponse>((resolve, reject) => {
     let data = {};
 
     if (
@@ -74,13 +74,14 @@ const request: CustomRequest = function(url, method, payload, option) {
       })
       .catch((err: AxiosError) => {
         if (axios.isCancel(err)) {
-          console.log(JSON.parse(err.message).message);
+          console.log(JSON.parse(err.message));
         }
 
-        // cancel error 不显示弹出框提示，设置了 error 为 true 的显示错误提示信息
-        if (error && !axios.isCancel(err)) createMessage(err.message, "error");
-        // NOTE：不再将错误传递至后续 promise 中
-        // reject(err);
+        // cancel error 不显示弹出框提示，不向后传递。设置了 error 为 true 的显示错误提示信息，且向后传递
+        if (error && !axios.isCancel(err)) {
+          createMessage(err.message, "error");
+          reject(err);
+        }
       })
       .finally(() => {
         // 关闭 loading 组件

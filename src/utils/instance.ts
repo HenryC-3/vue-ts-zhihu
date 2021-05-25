@@ -32,6 +32,7 @@ instance.interceptors.request.use((config: AxiosRequestConfig & Option) => {
   const { cache, url, data, params } = config;
   const key = url + JSON.stringify(data) + JSON.stringify(params);
 
+  // 缓存逻辑
   // 如果开启缓存
   if (cache) {
     // 如果 loadedUrl 中存在当前 url
@@ -39,11 +40,7 @@ instance.interceptors.request.use((config: AxiosRequestConfig & Option) => {
       const config = loadedUrl[key];
       // 如果数据存在且未过期，取消发送
       if (config && config.expries > Date.now()) {
-        source.cancel(
-          JSON.stringify({
-            message: "请求取消"
-          })
-        );
+        source.cancel(JSON.stringify("请求取消"));
       } else {
         // 如果数据存在，但过期，移除该属性
         delete store.state.loadedUrl[key];
