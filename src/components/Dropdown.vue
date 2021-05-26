@@ -1,16 +1,22 @@
 <template>
   <!-- 使用 ref 获取 DOM 元素 -->
-  <div class="dropdown" ref="dropdownRef">
+  <div class="flex flex-col mr-[16px]">
     <a
-      href="#"
-      class="btn btn-outline-light my-2 dropdown-toggle"
+      ref="dropdownRef"
       @click.prevent="toggleOpen"
+      href="#"
+      class="relative btn btn-light-blue w-38 transform transition-all hover:shadow-x-sm hover:translate-y-[-2px]"
+      >{{ title }}</a
     >
-      {{ title }}
-    </a>
-    <ul class="dropdown-menu" :style="{ display: 'block' }" v-if="isOpen">
+
+    <!-- 添加下拉动画 -->
+    <div
+      v-if="isOpen"
+      class="absolute top-[56px] mt-2 w-38 rounded-md shadow-lg bg-white"
+    >
+      <div class="trangle absolute top-[-18px] right-[54px] "></div>
       <slot></slot>
-    </ul>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -46,3 +52,16 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.dropdown-logout {
+  cursor: pointer;
+}
+.trangle {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid white;
+}
+</style>

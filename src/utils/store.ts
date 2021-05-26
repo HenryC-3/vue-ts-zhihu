@@ -26,7 +26,9 @@ export const store = createStore<GlobalStore>({
     login(state, rawData) {
       state.token = rawData.token;
     },
-
+    logout(state) {
+      state.user.isLogin = false;
+    },
     createPost(state, post: PostProps) {
       state.posts[post._id] = post;
     },

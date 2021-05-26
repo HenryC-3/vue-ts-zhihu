@@ -1,7 +1,8 @@
 <template>
-  <li class="dropdown-option" :class="{ 'is-disabled': disabled }">
+  <!-- IMPR: 修改 div 为 li -->
+  <div :class="{ 'is-disabled': disabled }">
     <slot></slot>
-  </li>
+  </div>
 </template>
 
 <script lang="ts">
@@ -16,9 +17,9 @@ export default defineComponent({
 });
 </script>
 
-<style>
-.dropdown-option.is-disabled * {
-  color: #6c757d;
+<style scoped>
+.is-disabled * {
+  color: #8d959c;
   pointer-events: none;
   background-color: transparent;
 }

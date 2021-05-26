@@ -1,12 +1,14 @@
 <template>
-  <div class="container">
-    <column-list :list="data"></column-list>
-  </div>
-
-  <div class="d-flex justify-content-center">
-    <button class="btn btn-primary" @click="loadMorePage" v-if="!isLastPage">
-      加载更多
-    </button>
+  <div class="bg-gray-200 min-h-[730px]">
+    <column-list :list="data" class="mx-auto"></column-list>
+    <a
+      @click="loadMorePage"
+    v-if="!isLastPage"
+      href="#"
+      class="btn btn-gray transform hover:translate-y-[-5px] hover:shadow-x-sm active:shadow-none transition-all mx-auto mt-4"
+      >加载更多</a
+    >
+    <div class="invisible h-4"></div>
   </div>
 </template>
 

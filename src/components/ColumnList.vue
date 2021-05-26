@@ -1,26 +1,38 @@
 <template>
-  <div class="row">
-    <div v-for="column in columnList" :key="column._id" class="col-4 mb-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body text-center">
-          <img
-            :src="column.avatar && column.avatar.fitUrl"
-            :alt="column.title"
-            class="rounded-circle border border-light w-25 my-3"
-          />
-          <h5 class="card-title">{{ column.title }}</h5>
-          <p class="card-text text-left">{{ column.description }}</p>
-          <!-- <router-link
-            class="btn btn-outline-success"
-            :to="{ name: 'column', params: { id: column.id } }"
-            >进入专栏</router-link
-          > -->
-          <router-link
-            class="btn btn-outline-success"
-            :to="`/column/${column._id}`"
-            >进入专栏</router-link
-          >
-        </div>
+  <div class="flex flex-wrap lg:w-[944px] md:w-[708px] sm:w-[708px]">
+    <div
+      class="card-container sm:w-[220px] sm:h-[250px] sm:mt-4 sm:mx-2 bg-white box-border py-4 px-4 sm:max-w-[250px] sm:rounded sm:shadow-lg flex sm:flex-col <sm:w-[640px]"
+      v-for="column in columnList"
+      :key="column.title"
+    >
+      <!-- img -->
+      <img
+        :src="column.avatar && column.avatar.fitUrl"
+        alt="img"
+        class="w-14 h-14 rounded-1 border border-green-600 py-[2px] px-[2px] shadow-lg self-center flex-shrink-0"
+      />
+      <!-- description -->
+      <div class="card-description m-y-4 flex-1 sm:flex sm:flex-col">
+        <!-- title -->
+        <h5
+          class="card-title font-semibold text-base sm:text-center line-clamp-1 overflow-ellipsis"
+        >
+          {{ column.title }}
+        </h5>
+        <p
+          class="card-description text-gray-500 text-sm sm:text-center sm:pt-2 sm:line-clamp-3 <sm:line-clamp-2 overflow-ellipsis"
+        >
+          {{ column.description }}
+        </p>
+      </div>
+      <!-- button -->
+      <div class="self-center flex-shrink-0">
+        <router-link
+          href="#"
+          class="text-green-600 text-sm sm:btn sm:btn-green sm:shadow-lg"
+          :to="`/column/${column._id}`"
+          >进入专栏</router-link
+        >
       </div>
     </div>
   </div>
