@@ -65,7 +65,8 @@ router.beforeEach((to, from, next) => {
         .then(() => {
           redirectAlreadyLogin ? next("/") : next();
         })
-        .catch(e => { // token 过期，登录失败，跳转至登录页
+        .catch(e => {
+          // token 过期，登录失败，跳转至登录页
           localStorage.removeItem("token");
           createMessage("登录过期，请重新登录", "error");
           next("login");
