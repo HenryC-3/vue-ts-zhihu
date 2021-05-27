@@ -26,20 +26,19 @@
   <div class="md:w-[768px] mt-4 mx-auto">
     <post-list :posts="posts"></post-list>
   </div>
-
-  <a
-    @click="loadMorePage"
-    v-if="!isLastPage"
-    href="#"
-    class="btn btn-gray transform hover:translate-y-[-5px] hover:shadow-x-sm active:shadow-none transition-all mx-auto mt-4"
-    >加载更多</a
+  <!-- 加载更多 -->
+  <load-more-button
+    :currentCount="count"
+    :params="{ page: 2, size: 2, columnId }"
+    :action="`fetchPosts`"
+    @isLastPage="handleLastPage"
+    >加载更多</load-more-button
   >
-  <div class="invisible h-4"></div>
 </template>
 
 <script lang="ts">
 import PostList from "@/components/PostList.vue";
-import useLoadMore from "@/hooks/useLoadMore";
+import LoadMoreButton from "@/components/LoadMoreButton.vue";
 import { ColumnProps, PostProps } from "@/types/types";
 import { addColumnAvatar } from "@/utils/helper";
 import createMessage from "../components/createMessage";
@@ -48,12 +47,11 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
 export default defineComponent({
-  components: { PostList },
+  components: { PostList, LoadMoreButton },
   name: "ColumnDetail",
   setup() {
     const route = useRoute();
     const store = useStore();
-    const currentCount = computed(() => Object.keys(store.state.posts).length);
     onMounted(() => {
       store.dispatch("fetchPosts", {
         columnId: route.params.id,
@@ -80,25 +78,18 @@ export default defineComponent({
       });
     });
 
-    const { isLastPage, loadMorePage } = useLoadMore(
-      "fetchPosts",
-      {
-        columnId: route.params.id,
-        page: 2,
-        size: 2
-      },
-      currentCount
-    );
-
-    watch(isLastPage, () => {
+    const handleLastPage = () => {
       createMessage("全部加载完毕", "success");
-    });
+    };
 
     return {
       posts: currentColumnPosts,
       column,
-      isLastPage,
-      loadMorePage
+      count: {
+        count: computed(() => Object.keys(store.state.posts).length) //NOTE: 查看 useLoadMore 中关于此处参数的说明
+      },
+      handleLastPage,
+      columnId: route.params.id
     };
   }
 });
