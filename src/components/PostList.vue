@@ -1,30 +1,30 @@
 <template>
-  <div class="post-list">
-    <article v-for="post in list" :key="post._id" class="card mb-3 shadow-sm">
-      <div class="card-body">
-        <h4>
-          <router-link :to="`/post/${post._id}`" class="post-title">{{
-            post.title
-          }}</router-link>
-        </h4>
-        <div class="row my-3 align-items-center">
-          <div
-            v-if="post.image && typeof post.image !== 'string'"
-            class="col-4"
-          >
-            <img
-              :src="post.image.fitUrl"
-              :alt="post.title"
-              class="rounded-lg w-100"
-            />
-          </div>
-          <p :class="{ 'col-8': post.image }" class="text-muted">
-            {{ post.excerpt }}
-          </p>
-        </div>
-        <span class="text-muted">{{ post.createdAt }}</span>
-      </div>
-    </article>
+  <!-- container -->
+  <div
+    v-for="post in list"
+    :key="post._id"
+    class="box-border flex items-center md:py-4 md:px-my-4 <sm:py-2 <sm:px-2 rounded bg-white md:mt-4 <sm:mt-[1px] shadow-sm"
+  >
+    <!-- img -->
+    <div v-if="post.image && post.image !== `string`">
+      <img
+        :src="post.image.fitUrl"
+        :alt="post.title"
+        class="h-[100px] w-[100px] object-cover mr-4 rounded border border-green-600 py-[2px] px-[2px] md:shadow-lg self-center flex-shrink-0"
+      />
+    </div>
+    <!-- info -->
+    <div class="flex-1 flex flex-col">
+      <h4 class="text-gray-800 font-semibold line-clamp-1 overflow-ellipsis">
+        <router-link :to="`/post/${post._id}`">{{ post.title }}</router-link>
+      </h4>
+      <p class="text-sm pt-2 text-gray-500 line-clamp-2 overflow-ellipsis">
+        {{ post.excerpt }}
+      </p>
+      <span class="text-sm pt-2 text-gray-500"
+        >发布于：{{ post.createdAt }}</span
+      >
+    </div>
   </div>
 </template>
 
@@ -56,14 +56,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style scoped>
-.post-title {
-  text-decoration: none;
-  color: black;
-}
-
-.post-title:hover {
-  color: #0d6efd;
-}
-</style>

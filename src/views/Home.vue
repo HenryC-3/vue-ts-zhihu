@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-gray-200 min-h-[730px]">
+  <div>
     <column-list :list="data" class="mx-auto"></column-list>
     <a
       @click="loadMorePage"
-    v-if="!isLastPage"
+      v-if="!isLastPage"
       href="#"
       class="btn btn-gray transform hover:translate-y-[-5px] hover:shadow-x-sm active:shadow-none transition-all mx-auto mt-4"
       >加载更多</a

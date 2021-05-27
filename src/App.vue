@@ -1,7 +1,9 @@
 <template>
-  <global-header :user="userData"></global-header>
-  <loading :loading="loading" />
-  <router-view></router-view>
+  <div class="bg-gray-200 min-h-[768px]">
+    <global-header :user="userData"></global-header>
+    <loading :loading="loading" />
+    <router-view></router-view>
+  </div>
   <footer class="text-center text-sm text-gray-600">
     <p>Henryc-3 - 2324375439@qq.com</p>
   </footer>

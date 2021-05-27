@@ -38,7 +38,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { ListProps, ColumnProps } from "../types/types";
 import { addColumnAvatar } from "../utils/helper";
 
@@ -58,6 +58,8 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const screenSize = ref(0);
+    
     const columnList = computed(() => {
       return Object.values(props.list).map(column => {
         addColumnAvatar(column, 50, 50);
