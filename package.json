@@ -19,6 +19,7 @@
     "vuex": "^4.0.0"
   },
   "devDependencies": {
+    "@vue/devtools-api": "^6.0.0-beta.11",
     "@commitlint/cli": "^12.0.1",
     "@commitlint/config-conventional": "^12.0.1",
     "@types/markdown-it": "^12.0.1",
