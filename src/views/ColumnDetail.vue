@@ -1,26 +1,28 @@
 <template>
   <!-- 专栏详情 -->
   <div v-if="column" class="w-[100%] bg-white mt-[1px] mx-auto ">
-    <div class="bg-white box-border py-4 px-4 flex md:w-[768px] mx-auto">
-      <!-- img -->
-      <img
-        :src="column.avatar && column.avatar.fitUrl"
-        alt="img"
-        class="w-18 h-18 rounded-1 border border-green-600 py-[2px] px-[2px] shadow-lg self-center flex-shrink-0"
-      />
-      <!-- info -->
-      <div class="m-y-4 flex-1">
-        <!-- title -->
+    <!-- container -->
+    <card
+      :title="column.title"
+      :description="column.description"
+      class="box-border p-4 md:w-768px mx-auto"
+    >
+      <template #img>
+        <img
+          :src="column.avatar && column.avatar.fitUrl"
+          class="w-18 h-18 rounded-1 border border-green-600 py-[2px] px-[2px] shadow-lg self-center flex-shrink-0 mr-4"
+        />
+      </template>
+
+      <template #title>
         <h5
-          class="card-title font-semibold text-lg line-clamp-1 overflow-ellipsis"
+          class=" font-semibold text-lg break-all line-clamp-1 overflow-ellipsis pt-2"
         >
           {{ column.title }}
         </h5>
-        <p class="text-gray-500 text-sm line-clamp-2 overflow-ellipsis">
-          {{ column.description }}
-        </p>
-      </div>
-    </div>
+      </template>
+      ></card
+    >
   </div>
   <!-- 文章列表 -->
   <div class="md:w-[768px] mt-4 mx-auto">
@@ -42,12 +44,13 @@ import LoadMoreButton from "@/components/LoadMoreButton.vue";
 import { ColumnProps, PostProps } from "@/types/types";
 import { addColumnAvatar } from "@/utils/helper";
 import createMessage from "../components/createMessage";
-import { computed, ComputedRef, defineComponent, onMounted, watch } from "vue";
+import { computed, ComputedRef, defineComponent, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
+import Card from "@/components/Card.vue";
 
 export default defineComponent({
-  components: { PostList, LoadMoreButton },
+  components: { PostList, LoadMoreButton, Card },
   name: "ColumnDetail",
   setup() {
     const route = useRoute();
