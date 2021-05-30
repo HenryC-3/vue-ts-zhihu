@@ -1,49 +1,31 @@
 <template>
-  <div class="user-profile-component">
-    <div class="d-flex align-items-center">
-      <img
-        :src="fitUrl"
-        :alt="user.nickName"
-        class="rounded-circle img-thumbnail"
-      />
-      <div class="detail ml-2">
-        <h6 class="d-block mb-0">{{ user.nickName }}</h6>
-        <span class="text-truncate text-muted d-block">{{
-          user.description
-        }}</span>
-      </div>
-    </div>
-  </div>
+  <card
+    :description="userFit.description"
+    :img="userFit.avatar?.fitUrl"
+    :title="userFit.nickName"
+    class="shadown-lg"
+  ></card>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import { UserProps } from "../types/types";
 import { addColumnAvatar } from "../utils/helper";
+import Card from "./Card.vue";
+
 export default defineComponent({
+  components: { Card },
   props: {
     user: {
       type: Object as PropType<UserProps>,
       required: true
     }
-  }, 
+  },
   setup(props) {
-    const fitUrl = computed(() => {
-      addColumnAvatar(props.user, 50, 50);
-      return props.user.avatar?.fitUrl;
-    });
+    addColumnAvatar(props.user, 50, 50);
     return {
-      fitUrl
+      userFit: props.user
     };
   }
 });
 </script>
-
-<style>
-.user-profile-component img {
-  width: 50px;
-  height: 50px;
-  /* border: 1px solid #ccc;
-  border-radius: 50px; */
-}
-</style>

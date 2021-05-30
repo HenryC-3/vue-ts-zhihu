@@ -1,28 +1,25 @@
 <template>
   <teleport to="#modal">
-    <div class="modal-container" v-if="isShow">
-      <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">提示</h5>
-          </div>
-          <div class="modal-body">
-            <!-- 自定义文本 -->
-            <slot></slot>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              @click="handleCancel"
-            >
-              取消
-            </button>
-            <button type="button" class="btn btn-danger" @click="handleConfirm">
-              确认
-            </button>
-          </div>
+    <div class="mask shadow-lg flex flex-col justify-center items-center">
+      <div
+        class="justify-center bg-white flex flex-col w-[300px] h-[150px] rounded opacity-100"
+      >
+        <!-- 标题 -->
+        <h5 class="flex-shrink-0 text-red-600 box-border p-2 border-b-1px">
+          提示
+        </h5>
+        <!-- 信息 -->
+        <p class="flex-1 box-border p-2 border-b-1px">
+          <slot>确认删除该文章吗？</slot>
+        </p>
+        <!-- container -->
+        <div class="flex box-border justify-end p-2 flex-shrink-0">
+          <slot
+            ><action-button @click="handleConfirm" class="mr-4 btn-red"
+              >确认</action-button
+            ></slot
+          >
+          <slot><action-button @click="handleCancel">取消</action-button></slot>
         </div>
       </div>
     </div>
@@ -32,19 +29,17 @@
 <script lang="ts">
 import useTeleportDom from "@/hooks/useTeleportDom";
 import { defineComponent } from "vue";
+import ActionButton from "./ActionButton.vue";
 
 // FEAT:完成删除功能
 
 export default defineComponent({
   name: "Modal",
+  components: { ActionButton },
   emits: ["modalConfirm", "modalClose"],
-  props: {
-    isShow: {
-      type: Boolean
-    }
-  },
   setup(props, context) {
     useTeleportDom("div", "modal");
+
     const handleCancel = () => {
       context.emit("modalClose");
     };
@@ -58,14 +53,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style scoped>
-.modal-container {
-  background: rgba(255, 255, 255, 0.5);
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  position: fixed;
-  z-index: 100;
-}
-</style>

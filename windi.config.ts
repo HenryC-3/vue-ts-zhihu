@@ -16,6 +16,8 @@ export default defineConfig({
     "btn-gray": "text-gray-600 border-gray-600 hover:bg-gray-100",
     "btn-green": "text-green-600 border-green-600 hover:bg-green-100",
     "btn-light-blue":
-      "text-light-blue-600 border-light-blue-600 hover:bg-light-blue-100"
+      "text-light-blue-600 border-light-blue-600 hover:bg-light-blue-100",
+    "btn-red": "text-red-600 border-red-600 hover:bg-red-100",
+    mask: "fixed top-0 bottom-0 w-[100%] z-999 bg-gray-400 bg-opacity-50"
   }
 });

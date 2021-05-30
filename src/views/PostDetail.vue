@@ -1,46 +1,65 @@
 <template>
+  <!-- 操作按钮 -->
   <modal
-    :isShow="isShow"
+    v-if="isShow"
     @modalClose="handleModalClose"
     @modalConfirm="handleConfirmDelete"
-    >确定删除文章吗？</modal
+  ></modal>
+
+  <!-- 返回上级页面 -->
+
+  <article
+    v-if="currentPost"
+    class="flex flex-col items-center bg-white border-t-2px"
   >
-  <div>
-    <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
-      <!-- 头图 -->
-      <div class="post-image-container">
-        <img
-          :src="currentImageUrl"
-          alt="currentPost.title"
-          class="post-image"
-          v-if="currentImageUrl"
-        />
+    <!-- 头图 -->
+    <div v-if="currentImageUrl" class="w-[100%] mt-[1px]">
+      <img
+        :src="currentImageUrl"
+        :alt="currentPost.title"
+        class="w-700px h-[360px] object-cover mt-4 rounded mx-auto"
+      />
+    </div>
+    <!-- container -->
+    <div class="w-[100%]">
+      <div class="md:w-700px mx-auto <md:mx-4">
+        <!-- 标题 -->
+        <h2
+          class="block text-2xl font-semibold tracking-wide mt-4 mb-2 break-all line-clamp-1 overflow-ellipsis"
+        >
+          {{ currentPost.title }}
+        </h2>
+        <!-- 作者信息 -->
+        <user-profile
+          :user="currentPost.author"
+          v-if="typeof currentPost.author === 'object'"
+          class="border-t-1px border-b-1px"
+        ></user-profile>
       </div>
-      <!-- 标题 -->
-      <h2 class="mt-4 mb-4">{{ currentPost.title }}</h2>
+    </div>
+
+    <!-- container -->
+    <div class="relative md:w-700px <md:w-[100%] min-h-600px mt-2 mb-4 rounded">
+      <!-- 正文 -->
       <div
-        class="user-profile-component border-top border-bottom py-3 mb-5 align-items-center row g-0"
-      >
-        <div class="col">
-          <!-- 用户头像、描述 -->
-          <user-profile
-            :user="currentPost.author"
-            v-if="typeof currentPost.author === 'object'"
-          ></user-profile>
-        </div>
-        <span class="text-muted col text-end font-italic"
-          >发表于：{{ currentPost.createdAt }}</span
+        v-html="currentHTML"
+        class="space-y-6 tracking-wide bg:bg-red-400 <md:mx-4"
+      ></div>
+      <!-- 编辑按钮 -->
+      <div v-if="showEdit" class="flex md:justify-end box-border p-2 rounded">
+        <action-button
+          @click="handleDelete"
+          class="md:w-16 <md:flex-1 <md:border-r-0px btn-red md:mr-4"
+          >删除</action-button
+        >
+        <action-button
+          @click="handleModify"
+          class="md:w-16 <md:flex-1 btn-light-blue"
+          >编辑</action-button
         >
       </div>
-      <!-- 文章内容 -->
-      <div v-html="currentHTML"></div>
-      <!-- 编辑按钮 -->
-      <div v-if="showEdit" class="d-flex justify-content-between">
-        <button class="btn btn-primary" @click="handleModify">修改</button>
-        <button class="btn btn-danger" @click="handleDelete">删除</button>
-      </div>
-    </article>
-  </div>
+    </div>
+  </article>
 </template>
 
 <script lang="ts">
@@ -52,15 +71,17 @@ import UserProfile from "../components/UserProfile.vue";
 import markdownIt from "markdown-it";
 import Modal from "@/components/Modal.vue";
 import createMessage from "@/components/createMessage";
+import ActionButton from "@/components/ActionButton.vue";
 export default {
   name: "PostDetail",
-  components: { UserProfile, Modal },
+  components: { UserProfile, Modal, ActionButton },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
     const md = new markdownIt();
     const isShow = ref(false);
+
     onMounted(() => {
       store.dispatch("fetchPost", { postId: route.params.id });
     });
@@ -125,15 +146,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.post-image-container {
-  height: 200px;
-  cursor: pointer;
-}
-.post-image {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-</style>

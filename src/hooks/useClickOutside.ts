@@ -1,9 +1,8 @@
-import { ref, onMounted, onUnmounted, Ref } from "vue";
+import { ref, Ref } from "vue";
 
 export default function useClickOutside(elementRef: Ref<null | HTMLElement>) {
   const isClickOutside = ref(false);
   const handler = (e: MouseEvent) => {
-    debugger;
     if (elementRef.value?.contains(e.target as Node)) {
       isClickOutside.value = false;
     } else {
