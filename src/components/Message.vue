@@ -1,17 +1,13 @@
 <template>
   <div
-    v-if="isVisible"
-    class="alert global-msg"
-    :class="styleClass"
-    role="alert"
+    :class="[
+      type === 'success' ? 'text-green-500 border-green-300' : '',
+      type === 'default' ? 'text-ligth-blue-500 border-ligth-blue-300' : '',
+      type === 'error' ? 'text-red-500 border-red-300' : ''
+    ]"
+    class="fixed top-[10%] left-[50%] transform translate-x-[-50%] box-border p-2 bg-white border-1 border-solid rounded shadow-xl text-sm w-48 h-14 flex justify-center items-center"
   >
-    <span>{{ message }}</span>
-    <button
-      type="button"
-      class="btn-close"
-      @click.prevent="hide"
-      aria-label="Close"
-    ></button>
+    <p>{{ message }}</p>
   </div>
 </template>
 
@@ -28,37 +24,18 @@ export default defineComponent({
     },
     type: {
       type: String as PropType<MessageType>,
-      required: true
+      default: "default"
     }
   },
   setup(props) {
     const isVisible = ref(true);
-    const styleClass = {
-      "alert-success": props.type === "success",
-      "alert-danger": props.type === "error",
-      "alert-primary": props.type === "default"
-    };
-
     const hide = () => {
       isVisible.value = false;
     };
     return {
       hide,
-      isVisible,
-      styleClass
+      isVisible
     };
   }
 });
 </script>
-<style scoped>
-.global-msg {
-  width: 50%;
-  position: fixed;
-  top: 70.2px;
-  z-index: 100;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-}
-</style>
