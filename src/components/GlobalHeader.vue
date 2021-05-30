@@ -26,7 +26,7 @@
         >注册</router-link
       >
     </div>
-    <dropdown v-else :title="`你好，${user.nickName}`">
+    <dropdown v-else :title="`你好，${user.nickName}`" class="mr-16px">
       <dropdown-item class="text-center">
         <router-link
           :to="`/create`"

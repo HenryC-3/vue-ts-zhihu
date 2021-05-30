@@ -1,21 +1,20 @@
 <template>
   <!-- 使用 ref 获取 DOM 元素 -->
-  <div class="flex flex-col mr-[16px]">
-    <a
-      ref="dropdownRef"
-      @click.prevent="toggleOpen"
-      href="#"
-      class="relative btn btn-light-blue w-38 transform transition-all hover:shadow-x-sm hover:translate-y-[-2px]"
-      >{{ title }}</a
-    >
-
-    <!-- 添加下拉动画 -->
+  <div ref="dropdownRef" class="flex flex-col relative w-38">
+    <action-button @click.prevent="toggleOpen" class="w-[100%] btn-light-blue">
+      {{ title }}
+    </action-button>
+    <!-- constainer -->
     <div
       v-if="isOpen"
-      class="absolute top-[56px] mt-2 w-38 rounded-md shadow-lg bg-white"
+      class="absolute top-36px w-[100%] rounded shadow-lg flex flex-col"
     >
-      <div class="trangle absolute top-[-18px] right-[54px] "></div>
-      <slot></slot>
+      <div class="triangle self-center"></div>
+      <!-- 点击下拉列表后收起 -->
+      <div class="bg-white">
+        <!-- 下拉列表 -->
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -23,8 +22,10 @@
 import { ref } from "@vue/reactivity";
 import useClickOutside from "@/hooks/useClickOutside";
 import { watch } from "@vue/runtime-core";
+import ActionButton from "./ActionButton.vue";
 export default {
   name: "Dropdown",
+  components: { ActionButton },
   props: {
     title: {
       type: String,
@@ -34,19 +35,22 @@ export default {
   setup() {
     const isOpen = ref(false);
     const dropdownRef = ref<null | HTMLElement>(null);
-    const isClickOutside = useClickOutside(dropdownRef);
+    const { onClickOutside, addHandler, removeHandler } = useClickOutside(
+      dropdownRef
+    );
     const toggleOpen = () => {
       isOpen.value = !isOpen.value;
+      if (isOpen.value) addHandler();
     };
-    watch(isClickOutside, () => {
-      if (isClickOutside.value && isOpen.value === true) {
+    watch(onClickOutside, () => {
+      if (onClickOutside.value && isOpen.value === true) {
         isOpen.value = false;
+        removeHandler();
       }
     });
     return {
       toggleOpen,
       isOpen,
-      // 获取 DOM 元素
       dropdownRef
     };
   }
@@ -54,14 +58,11 @@ export default {
 </script>
 
 <style scoped>
-.dropdown-logout {
-  cursor: pointer;
-}
-.trangle {
+.triangle {
   width: 0;
   height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 20px solid white;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid white;
 }
 </style>
