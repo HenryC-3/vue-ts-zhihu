@@ -1,7 +1,10 @@
 <template>
   <!-- 挂载在 div#loading 上 -->
-  <teleport to="#loading">
-    <div v-if="loading" class="mask flex justify-center items-center">
+  <teleport to="#loading" v-if="teleport">
+    <div
+      v-if="loading"
+      :class="[hasMask ? 'mask flex justify-center items-center' : '']"
+    >
       <div class="lds-ring">
         <div></div>
         <div></div>
@@ -10,6 +13,19 @@
       </div>
     </div>
   </teleport>
+  <div v-else>
+    <div
+      v-if="loading"
+      :class="[hasMask ? 'mask flex justify-center items-center' : '']"
+    >
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -22,6 +38,14 @@ export default defineComponent({
     loading: {
       type: Boolean,
       required: true
+    },
+    hasMask: {
+      type: Boolean,
+      default: true
+    },
+    teleport: {
+      type: Boolean,
+      default: true
     }
   },
   setup() {
@@ -43,10 +67,10 @@ export default defineComponent({
   width: 64px;
   height: 64px;
   margin: 8px;
-  border: 8px solid #fff;
+  border: 8px solid rgba(224, 242, 254, 1);
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #fff transparent transparent transparent;
+  border-color: rgba(224, 242, 254, 1) transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
