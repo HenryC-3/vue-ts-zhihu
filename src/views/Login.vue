@@ -1,30 +1,34 @@
 <template>
-  <div class="login-page mx-auto p-3" style="max-width: 330px">
-    <h5 class="my-4 text-center">登录到者也</h5>
+  <!-- container -->
+  <div
+    class="w-300px bg-white box-border rounded p-2 absolute top-[50%] transform translate-y-[-50%] left-[50%] translate-x-[-50%]"
+  >
+    <!-- 标题 -->
+    <h5 class="text-center text-2xl text-light-blue-600 mb-10">登录</h5>
+    <!-- container -->
     <validate-form @form-submit="onFormSubmit">
-      <div class="mb-3">
-        <label class="form-label">邮箱地址</label>
+      <div>
         <validate-input
           :rules="emailRule"
           v-model="email"
-          placeholder="请输入邮箱地址"
+          placeholder="请输入邮箱"
           type="text"
           ref="inputRef"
+          class="w-[100%]"
         />
       </div>
-      <div class="mb-3">
-        <label class="form-label">密码</label>
+      <!-- container -->
+      <div>
         <validate-input
           type="password"
           placeholder="请输入密码"
           :rules="passwordRule"
           v-model="password"
+          class="w-[100%]"
         />
       </div>
       <template #submit>
-        <button type="submit" class="btn btn-primary btn-block btn-large">
-          登录
-        </button>
+        <action-button type="submit" class="btn-light-blue">登录</action-button>
       </template>
     </validate-form>
   </div>
@@ -38,10 +42,11 @@ import { useStore } from "vuex";
 import ValidateInput from "../components/ValidateInput.vue";
 import { emailRule, passwordRule } from "../utils/validateRules";
 import createMessage from "../components/createMessage";
+import ActionButton from "@/components/ActionButton.vue";
 
 export default defineComponent({
   name: "Login",
-  components: { ValidateInput, ValidateForm },
+  components: { ValidateInput, ValidateForm, ActionButton },
   setup() {
     const email = ref("");
     const password = ref("");

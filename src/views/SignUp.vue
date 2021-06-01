@@ -1,47 +1,41 @@
 <template>
-  <div class="signup-page mx-auto p-3 w-330">
-    <h5 class="my-4 text-center">注册者也账户</h5>
+  <!-- container -->
+  <div
+    class="w-300px bg-white box-border rounded p-2 absolute top-[50%] transform translate-y-[-50%] left-[50%] translate-x-[-50%]"
+  >
+    <h5 class="text-center text-2xl text-light-blue-600 mb-10">注册</h5>
+
     <validate-form @form-submit="onFormSubmit">
-      <div class="mb-3">
-        <label class="form-label">邮箱地址</label>
-        <validate-input
-          :rules="emailRule"
-          v-model="formData.email"
-          placeholder="请输入邮箱地址"
-          type="text"
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">昵称</label>
-        <validate-input
-          :rules="nameRule"
-          v-model="formData.nickName"
-          placeholder="请输入昵称"
-          type="text"
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">密码</label>
-        <validate-input
-          type="password"
-          placeholder="请输入密码"
-          :rules="passwordRule"
-          v-model="formData.password"
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">重复密码</label>
-        <validate-input
-          type="password"
-          placeholder="再次输入密码"
-          :rules="repeatPasswordRule"
-          v-model="formData.repeatPassword"
-        />
-      </div>
+      <validate-input
+        :rules="emailRule"
+        v-model="formData.email"
+        placeholder="请输入邮箱地址"
+        type="text"
+        class="w-[100%]"
+      />
+      <validate-input
+        :rules="nameRule"
+        v-model="formData.nickName"
+        placeholder="请输入昵称"
+        type="text"
+        class="w-[100%]"
+      />
+      <validate-input
+        type="password"
+        placeholder="请输入密码"
+        :rules="passwordRule"
+        v-model="formData.password"
+        class="w-[100%]"
+      />
+      <validate-input
+        type="password"
+        placeholder="再次输入密码"
+        :rules="repeatPasswordRule"
+        v-model="formData.repeatPassword"
+        class="w-[100%]"
+      />
       <template #submit>
-        <button type="submit" class="btn btn-primary btn-block btn-large">
-          注册新用户
-        </button>
+        <action-button class="btn-light-blue">注册</action-button>
       </template>
     </validate-form>
   </div>
@@ -56,12 +50,14 @@ import ValidateForm from "../components/ValidateForm.vue";
 import createMessage from "../components/createMessage";
 import { RulesProp } from "@/types/types";
 import { nameRule, emailRule, passwordRule } from "../utils/validateRules";
+import ActionButton from "@/components/ActionButton.vue";
 
 export default defineComponent({
   name: "Signup",
   components: {
     ValidateInput,
-    ValidateForm
+    ValidateForm,
+    ActionButton
   },
   setup() {
     const formData = reactive({
