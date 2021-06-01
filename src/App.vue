@@ -13,7 +13,6 @@
 import { computed, defineComponent } from "vue";
 import GlobalHeader from "./components/GlobalHeader.vue";
 import Loading from "./components/Loading.vue";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import { useStore } from "vuex";
 
 export default defineComponent({
