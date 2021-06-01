@@ -1,7 +1,7 @@
 <template>
   <div v-if="tag === 'input'">
     <input
-      class="p-2"
+      class="p-2 bg-[#e7f0fe]"
       @blur="validateInput"
       v-model="inputRef.val"
       :class="[
@@ -20,7 +20,7 @@
   </div>
   <div v-if="tag === 'textarea'">
     <textarea
-      class="p-2"
+      class="p-2 bg-[#e7f0fe]"
       :class="[
         inputRef.isInvalid
           ? 'focus:outline-none ring ring-red-300  border-red-300'
