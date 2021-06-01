@@ -73,12 +73,17 @@ const request: CustomRequest = function(url, method, payload, option) {
         }
       })
       .catch((err: AxiosError) => {
+        const online = window.navigator.onLine;
         if (axios.isCancel(err)) {
           console.log(JSON.parse(err.message));
         }
 
-        // cancel error 不显示弹出框提示，不向后传递。设置了 error 为 true 的显示错误提示信息，且向后传递
-        if (error && !axios.isCancel(err)) {
+        if (!online) {
+          createMessage("网络中断", "error");
+        }
+
+        // cancel error，offline error 不向后传递。设置了 error 为 true 的显示错误提示信息，且向后传递
+        if (error && !axios.isCancel(err) && online) {
           createMessage(err.message, "error");
           reject(err);
         }
