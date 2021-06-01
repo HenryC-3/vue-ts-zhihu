@@ -1,48 +1,59 @@
 <template>
+  <!-- container -->
   <div
-    class="file-upload-container"
     @click.prevent="triggerUpload"
     v-bind="$attrs"
+    class="flex justify-center items-center rounded md:w-700px h-360px"
+    :class="[
+      uploadingStatus !== 'success'
+        ? 'border-3 border-dashed border-gray-500 bg-gray-100'
+        : ''
+    ]"
   >
+    <!-- 未上传样式 -->
     <slot v-if="uploadingStatus === 'ready'" name="ready">
-      <button class="btn btn-primary">
+      <button class="btn btn-gray">
         点击上传
       </button>
     </slot>
+    <!-- 上传样式 -->
     <slot v-else-if="uploadingStatus === 'uploading'" name="uploading">
-      <button class="btn btn-primary is-disabled">正在上传</button>
+      <button class="btn btn-gray is-disabled">正在上传</button>
     </slot>
+    <!-- 上传成功样式 -->
     <slot
       v-else-if="uploadingStatus === 'success'"
       name="success"
       :uploadImgURL="uploadImgURL"
     >
-      <img :src="uploadImgURL" class="file-upload-image" />
+      <img :src="uploadImgURL" />
     </slot>
+    <!-- 上传失败样式 -->
     <slot v-else-if="uploadingStatus === 'error'" name="error">
-      <button class="btn btn-danger">
+      <button class="btn btn-red">
         上传失败，重新上传
       </button>
     </slot>
   </div>
-  <input type="file" ref="inputRef" class="d-none" @change="handleFileChange" />
+  <input type="file" ref="inputRef" class="hidden" @change="handleFileChange" />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-// eslint-disable-next-line
 import { uploadingStatus } from "../types/types";
-import axios from "axios";
 import { fileUpload } from "@/api/file";
 
 export default defineComponent({
   name: "Upload",
   props: {
+    // 目标地址
     action: {
       type: String,
       required: true
     },
-    beforeUpload: Function,
+    // 图片发送之前的检查
+    fileChecker: Function,
+    // 指定上传组件状态
     status: {
       type: Boolean,
       required: true
@@ -71,9 +82,9 @@ export default defineComponent({
       if (currentTarget.files) {
         const files = Array.from(currentTarget.files);
         formData.append("uploadImg", files[0]);
-        if (props.beforeUpload) {
+        if (props.fileChecker) {
           // 如果文件验证失败，不进行后续操作
-          if (!props.beforeUpload(files[0])) {
+          if (!props.fileChecker(files[0])) {
             uploadingStatus.value = "error";
             return;
           }
@@ -108,16 +119,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style>
-.file-upload-container {
-  height: 200px;
-  cursor: pointer;
-}
-.file-upload-image {
-  height: 100%;
-  width: 100%;
-  /* NOTE:保证图片比例 */
-  object-fit: cover;
-}
-</style>

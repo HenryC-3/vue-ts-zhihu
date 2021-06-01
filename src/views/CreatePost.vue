@@ -1,57 +1,68 @@
 <template>
-  <h3 v-if="!postId">新建文章</h3>
-  <upload
-    :action="'/upload'"
-    :status="isSuccess"
-    :beforeUpload="handleBeforeUpload"
-    @uploading="handleUploading"
-    @fileUploaded="handleFileUploaded"
-    @uploadedError="handleUploadedError"
-    class="d-flex justify-content-center align-items-center bg-light text-secondary w-100 my-4"
-  >
-    <template #ready>
-      <h2>点击上传头图</h2>
-    </template>
-    <template #uploading>
-      <div class="d-flex">
-        <div class="spinner-border text-secondary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <h2>正在上传</h2>
-      </div>
-    </template>
-    <template #success="dataProps">
-      <!-- 如果 uploadImgURL 不存在则使用 currentPostURL -->
-      <img
-        :src="dataProps.uploadImgURL || currentPostImgURL"
-        class="file-upload-image"
-      />
-    </template>
-  </upload>
-  <validate-form @form-submit="onPostSubmit">
-    <template #default>
-      <p>文章标题：</p>
-      <validate-input
-        placeholder="请输入文章标题"
-        :rules="postTitleRule"
-        v-model="title"
-      ></validate-input>
-      <p>文章内容：</p>
-      <validate-input
-        placeholder="请输入文章详情"
-        :tag="textarea"
-        rows="10"
-        :rules="postContentRule"
-        v-model="content"
-      ></validate-input>
-    </template>
-    <template #submit>
-      <button type="submit" class="btn btn-primary btn-outline-light">
-        <div v-if="!postId">发布文章</div>
-        <div v-else>更新文章</div>
-      </button>
-    </template>
-  </validate-form>
+  <div class="bg-white mt-[1px]">
+    <!-- container -->
+    <div class="pt-4">
+      <!-- 上传组件 -->
+      <upload
+        :action="'/upload'"
+        :status="isSuccess"
+        :fileChecker="handleFileChecker"
+        @uploading="handleUploading"
+        @fileUploaded="handleFileUploaded"
+        @uploadedError="handleUploadedError"
+        class="mx-auto cursor-pointer"
+      >
+        <!-- 未上传时样式 -->
+        <template #ready>
+          <h2 class="text-2xl text-gray-600">点击上传头图</h2>
+        </template>
+        <!-- 上传时样式 -->
+        <template #uploading>
+          <loading :loading="true" :hasMask="false" :teleport="false"></loading>
+        </template>
+        <!-- 上传成功样式 -->
+        <template #success="dataProps">
+          <!-- 如果 uploadImgURL 不存在则使用 currentPostURL -->
+          <img
+            :src="dataProps.uploadImgURL || currentPostImgURL"
+            class="object-cover h-360px"
+          />
+        </template>
+        <template #error>
+          <h2 class="text-2xl text-gray-600">点击重新上传</h2>
+        </template>
+      </upload>
+    </div>
+
+    <!-- container -->
+    <div class="mt-4 md:w-700px mx-auto">
+      <!-- 表单组件 -->
+      <validate-form @form-submit="onPostSubmit">
+        <template #default>
+          <validate-input
+            placeholder="请输入标题"
+            :rules="postTitleRule"
+            v-model="title"
+            class="text-2xl w-[100%]"
+          ></validate-input>
+          <validate-input
+            placeholder="请输入内容"
+            :tag="textarea"
+            rows="10"
+            :rules="postContentRule"
+            v-model="content"
+            class="w-[100%]"
+          ></validate-input>
+        </template>
+        <template #submit>
+          <action-button type="submit" class="btn-light-blue self-end">
+            <div v-if="!postId">发布文章</div>
+            <div v-else>更新文章</div>
+          </action-button>
+        </template>
+      </validate-form>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -61,6 +72,8 @@ import { ref } from "vue";
 import { useStore } from "vuex";
 import ValidateForm from "@/components/ValidateForm.vue";
 import ValidateInput from "../components/ValidateInput.vue";
+import ActionButton from "@/components/ActionButton.vue";
+import Loading from "@/components/Loading.vue";
 import Upload from "../components/Upload.vue";
 import { postTitleRule, postContentRule } from "../utils/validateRules";
 import createMessage from "../components/createMessage";
@@ -68,7 +81,7 @@ import { useRoute, useRouter } from "vue-router";
 import imageCheck from "../utils/imageCheck";
 export default defineComponent({
   name: "CreatePost",
-  components: { ValidateInput, ValidateForm, Upload },
+  components: { ValidateInput, ValidateForm, Upload, ActionButton, Loading },
   setup() {
     const title = ref("");
     const content = ref("");
@@ -85,17 +98,32 @@ export default defineComponent({
 
     // 根据 postId 判断是否为修改状态
     // 在 action 中进行判断：如果该 Id 对应的文章存在，则直接从 store 中读取数据，并填充到输入框中
+    // NOTE：在 request.ts 中返回了一个 new Promise，当请求被取消时，该 Promise 会捕获一个 cancel 错误
+    // 对于这类错误的处理是，不向后传递，即不使用 reject。这就导致了当请求取消时，既不会 resolve 也不会 reject
+    // 进而导致后续调用 then 无效 [如果 new Prmoise 不 resolve reject 会怎样](https://codepen.io/henryc-3/pen/ExWobBK?editors=0011)
+
+    // NOTE: 这里使用 Promise 是为了应对，修改文章但 vuex 中无数据的情况，确保先发送请求，后获取数据
     if (postId) {
-      store.dispatch("fetchPost", { postId }).then(() => {
-        const { title: currTitle, content: currContent, image } = post.value;
-        title.value = currTitle;
-        content.value = currContent;
-        if (image.url) {
-          currentPostImgURL.value = image.url;
-        } else {
-          isSuccess.value = false;
-        }
-      });
+      Promise.resolve()
+        .then(() => {
+          store.dispatch("fetchPost", { postId });
+        })
+        .then(() => {
+          if (post.value) {
+            const {
+              title: currTitle,
+              content: currContent,
+              image
+            } = post.value;
+            title.value = currTitle;
+            content.value = currContent;
+            if (image.url) {
+              currentPostImgURL.value = image.url;
+            } else {
+              isSuccess.value = false;
+            }
+          }
+        });
     } else {
       isSuccess.value = false;
     }
@@ -115,13 +143,13 @@ export default defineComponent({
         store
           .dispatch(action, { post })
           .then(res => {
-            createMessage("成功，即将跳转至专栏页", "success");
+            createMessage("即将跳转至专栏页", "success");
             setTimeout(() => {
               router.push({ path: `/column/${column}` });
             }, 1000);
           })
           .catch(e => {
-            createMessage("失败，即将跳转至首页", "error");
+            createMessage("即将跳转至首页", "error");
             setTimeout(() => {
               router.push({ path: `/` });
             }, 1000);
@@ -138,7 +166,7 @@ export default defineComponent({
     const handleUploadedError = () => {
       createMessage("上传失败", "error");
     };
-    const handleBeforeUpload = (file: File): boolean => {
+    const handleFileChecker = (file: File): boolean => {
       const { passed, error } = imageCheck(file, {
         type: ["image/png"],
         size: 1
@@ -161,7 +189,7 @@ export default defineComponent({
       handleUploading,
       handleFileUploaded,
       handleUploadedError,
-      handleBeforeUpload,
+      handleFileChecker,
       postId,
       isSuccess,
       currentPostImgURL

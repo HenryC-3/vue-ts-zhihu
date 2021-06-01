@@ -1,21 +1,42 @@
 <template>
-  <input
-    v-if="tag === 'input'"
-    class="form-control"
-    @blur="validateInput"
-    v-model="inputRef.val"
-    :class="{ 'is-invalid': inputRef.isInvalid }"
-    v-bind="$attrs"
-  />
-  <div class="form-text" v-if="inputRef.isInvalid">{{ inputRef.message }}</div>
-  <textarea
-    v-if="tag === 'textarea'"
-    class="form-control"
-    @blur="validateInput"
-    v-model="inputRef.val"
-    :class="{ 'is-invalid': inputRef.isInvalid }"
-    v-bind="$attrs"
-  />
+  <div v-if="tag === 'input'">
+    <input
+      class="p-2"
+      @blur="validateInput"
+      v-model="inputRef.val"
+      :class="[
+        inputRef.isInvalid
+          ? 'focus:outline-none ring ring-red-300  border-red-300'
+          : 'focus:outline-none focus:ring focus:border-blue-300'
+      ]"
+      v-bind="$attrs"
+    />
+    <div
+      class="text-red-400 py-1 h-8"
+      :class="[inputRef.isInvalid ? 'block' : 'invisible']"
+    >
+      {{ inputRef.message }}
+    </div>
+  </div>
+  <div v-if="tag === 'textarea'">
+    <textarea
+      class="p-2"
+      :class="[
+        inputRef.isInvalid
+          ? 'focus:outline-none ring ring-red-300  border-red-300'
+          : 'focus:outline-none focus:ring focus:border-blue-300'
+      ]"
+      @blur="validateInput"
+      v-model="inputRef.val"
+      v-bind="$attrs"
+    />
+    <div
+      class="text-red-400 py-1 h-8"
+      :class="[inputRef.isInvalid ? 'block' : 'invisible']"
+    >
+      {{ inputRef.message }}
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
