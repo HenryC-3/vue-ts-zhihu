@@ -15,10 +15,14 @@
     </div>
     <!-- info -->
     <div class="flex-1 flex flex-col">
-      <h4 class="text-gray-800 font-semibold line-clamp-1 overflow-ellipsis">
+      <h4
+        class="text-gray-800 font-semibold break-all line-clamp-1 overflow-ellipsis"
+      >
         <router-link :to="`/post/${post._id}`">{{ post.title }}</router-link>
       </h4>
-      <p class="text-sm pt-2 text-gray-500 line-clamp-2 overflow-ellipsis">
+      <p
+        class="text-sm pt-2 text-gray-500 break-all line-clamp-2 overflow-ellipsis"
+      >
         {{ post.excerpt }}
       </p>
       <span class="text-sm pt-2 text-gray-500"
